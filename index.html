@@ -174,5 +174,92 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- Statcounter Code Start -->
+<script type="text/javascript">
+var sc_project=13157668; 
+var sc_invisible=0; 
+var sc_security="e22a1f62"; 
+var scJsHost = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13157668/0/e22a1f62/0/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- Statcounter Code End -->
+
+</body>
+</html>// تحديث المشاهدات
+function updateViews() {
+  for (let ch in channelViews) {
+    let change = Math.floor(Math.random() * 101) - 50; // من -50 إلى +50
+    channelViews[ch] += change;
+    if (channelViews[ch] < 100) channelViews[ch] = 100;
+    if (channelViews[ch] > 4000) channelViews[ch] = 4000;
+  }
+}
+
+// التحقق من الوقت المسموح
+function isViewTime() {
+  let now = new Date();
+  let options = { timeZone: 'Asia/Baghdad', hour12: false };
+  let timeStr = now.toLocaleTimeString('en-GB', options);
+  let [hour, minute] = timeStr.split(':').map(Number);
+
+  return (hour >= 15 || hour < 1 || (hour === 1 && minute <= 30));
+}
+
+// عرض القنوات
+function renderChannels(list = channels) {
+  updateViews();
+  const container = document.getElementById('channelGrid');
+  container.innerHTML = '';
+  list.forEach(ch => {
+    let viewsHTML = '';
+    if (isViewTime()) {
+      viewsHTML = `<p style="font-size:11px;color:#0ff;">👁️ ${channelViews[ch.name]} مشاهد</p>`;
+    }
+    const card = document.createElement('div');
+    card.className = 'channel-card';
+    card.innerHTML = `
+      <div class="live-tag">مباشر</div>
+      <h3>${ch.name}</h3>
+      ${viewsHTML}
+      <p style="font-size:11px;color:yellow;">${ch.quality}</p>
+      <button onclick="openPopup('${ch.url}')">مشاهدة</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// مشغل الفيديو
+function openPopup(url) {
+  const popup = document.getElementById('popupPlayer');
+  const player = document.getElementById('mainPlayer');
+  player.src = url;
+  popup.style.display = 'block';
+}
+function closePopup() {
+  const popup = document.getElementById('popupPlayer');
+  const player = document.getElementById('mainPlayer');
+  player.pause();
+  player.src = '';
+  popup.style.display = 'none';
+}
+
+// البحث
+document.getElementById('searchInput').addEventListener('input', function() {
+  const term = this.value.toLowerCase();
+  const filtered = channels.filter(ch => ch.name.toLowerCase().includes(term));
+  renderChannels(filtered);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderChannels();
+  setInterval(renderChannels, 5000); // تحديث المشاهدات كل 5 ثواني
+});
+</script>
+
 </body>
 </html>
