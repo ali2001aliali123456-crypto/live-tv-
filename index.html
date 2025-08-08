@@ -1,42 +1,178 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>مرحبا بك في Live TV</title>
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      font-size: 3em;
-      color: #00ffcc;
-    }
-    p {
-      font-size: 1.2em;
-      margin-top: 20px;
-    }
-    .btn {
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #00ffcc;
-      color: #111;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #00ddaa;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>📺 لايف سبورت</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="refresh" content="300">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+    padding-bottom: 100px;
+  }
+  header { text-align: center; padding: 20px; color: #0ff; text-shadow: 0 0 10px #0ff; }
+  .search-box {
+    text-align: center; margin: 10px auto;
+  }
+  .search-box input {
+    padding: 6px 10px; border-radius: 8px; border: none;
+    width: 80%; max-width: 300px; font-size: 14px;
+  }
+  .channel-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; padding: 10px; max-width: 800px; margin: auto;
+  }
+  .channel-card {
+    position: relative; background: rgba(255,255,255,0.05);
+    border: 2px solid #0ff; border-radius: 10px; padding: 8px;
+    text-align: center; font-size: 12px; transition: 0.3s; transform: scale(0.9);
+  }
+  .channel-card:hover { transform: scale(0.95); box-shadow: 0 0 15px #0ff; }
+  .live-tag { position: absolute; top: 5px; left: 5px;
+    background: red; color: #fff; font-size: 10px;
+    padding: 2px 5px; border-radius: 4px;
+  }
+  .popup-player {
+    display: none; position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); background: #000;
+    padding: 10px; border-radius: 10px; z-index: 9999;
+    width: 90%; max-width: 800px;
+  }
+  .popup-player video { width: 100%; border-radius: 10px; }
+  .close-btn {
+    background: red; color: #fff; border: none; padding: 4px 10px;
+    border-radius: 6px; cursor: pointer; margin-top: 5px;
+  }
+  .refresh-btn {
+    background: #00cccc; color: #000; border: none;
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 14px; cursor: pointer;
+  }
+</style>
 </head>
 <body>
-  <h1>📺 أهلاً بك في موقع Live TV</h1>
-  <p>هذا الموقع تحت الإنشاء، ترقبوا البث المباشر والمحتوى الجديد قريباً!</p>
-  <button class="btn" onclick="alert('تابعنا قريباً!')">اضغط هنا</button>
+
+<header>
+  <h1>⚽ لايف سبورت</h1>
+  <p>📣 تابعنا على <a href="https://t.me/alialiah123456" target="_blank">التليجرام</a></p>
+  <button class="refresh-btn" onclick="location.reload()">🔄 تحديث الصفحة</button>
+</header>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔍 ابحث عن قناة...">
+</div>
+
+<section class="channel-grid" id="channelGrid"></section>
+
+<div class="popup-player" id="popupPlayer">
+  <video id="mainPlayer" controls autoplay></video>
+  <br>
+  <button onclick="document.getElementById('mainPlayer').requestFullscreen()" style="background:#0ff;color:#000;padding:6px 12px;border:none;border-radius:8px;cursor:pointer;">⛶ ملء الشاشة</button>
+  <button class="close-btn" onclick="closePopup()">❌ إغلاق</button>
+</div>
+
+<script>
+// ترتيب القنوات
+const channels = [
+  { name: 'سبورت 15', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/varzeshtest.m3u8' },
+  { name: 'سبورت 16', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/tv3test.m3u8' },
+  { name: 'سبورت 13', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/bein1.m3u8' },
+  { name: 'سبورت 1',  quality: 'HD', url: 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8' },
+  { name: 'سبورت 2',  quality: 'HD', url: 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/adaptive.m3u8' },
+  { name: 'سبورت 3',  quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6124/index.m3u8' },
+  { name: 'سبورت 4',  quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6131/index.m3u8' },
+  { name: 'سبورت 5',  quality: 'SD', url: 'http://125x.org:8080/bn2hd/tracks-v1a1/mono.m3u8' },
+  { name: 'سبورت 6',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12250/index.m3u8' },
+  { name: 'سبورت 7',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/6124/index.m3u8' },
+  { name: 'سبورت 8',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12251/index.m3u8' },
+  { name: 'سبورت 9',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12252/index.m3u8' },
+  { name: 'سبورت 10', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/6123/index.m3u8' },
+  { name: 'سبورت 11', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/2353/index.m3u8' },
+  { name: 'سبورت 12', quality: 'HD', url: 'http://iptv.nextnet.krd:25461/live/12920/4516/4690.m3u8' },
+  { name: 'سبورت 14', quality: 'HD', url: 'https://solhtvhls.wns.live/hls/stream.m3u8' }
+];
+
+// مشاهدات القنوات
+let channelViews = {};
+channels.forEach(ch => {
+  channelViews[ch.name] = Math.floor(Math.random() * (4000 - 100 + 1)) + 100;
+});
+
+// تحديث المشاهدات
+function updateViews() {
+  for (let ch in channelViews) {
+    let change = Math.floor(Math.random() * 101) - 50; // من -50 إلى +50
+    channelViews[ch] += change;
+    if (channelViews[ch] < 100) channelViews[ch] = 100;
+    if (channelViews[ch] > 4000) channelViews[ch] = 4000;
+  }
+}
+
+// التحقق من الوقت المسموح
+function isViewTime() {
+  let now = new Date();
+  let options = { timeZone: 'Asia/Baghdad', hour12: false };
+  let timeStr = now.toLocaleTimeString('en-GB', options);
+  let [hour, minute] = timeStr.split(':').map(Number);
+
+  return (hour >= 15 || hour < 1 || (hour === 1 && minute <= 30));
+}
+
+// عرض القنوات
+function renderChannels(list = channels) {
+  updateViews();
+  const container = document.getElementById('channelGrid');
+  container.innerHTML = '';
+  list.forEach(ch => {
+    let viewsHTML = '';
+    if (isViewTime()) {
+      viewsHTML = `<p style="font-size:11px;color:#0ff;">👁️ ${channelViews[ch.name]} مشاهد</p>`;
+    }
+    const card = document.createElement('div');
+    card.className = 'channel-card';
+    card.innerHTML = `
+      <div class="live-tag">مباشر</div>
+      <h3>${ch.name}</h3>
+      ${viewsHTML}
+      <p style="font-size:11px;color:yellow;">${ch.quality}</p>
+      <button onclick="openPopup('${ch.url}')">مشاهدة</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// مشغل الفيديو
+function openPopup(url) {
+  const popup = document.getElementById('popupPlayer');
+  const player = document.getElementById('mainPlayer');
+  player.src = url;
+  popup.style.display = 'block';
+}
+function closePopup() {
+  const popup = document.getElementById('popupPlayer');
+  const player = document.getElementById('mainPlayer');
+  player.pause();
+  player.src = '';
+  popup.style.display = 'none';
+}
+
+// البحث
+document.getElementById('searchInput').addEventListener('input', function() {
+  const term = this.value.toLowerCase();
+  const filtered = channels.filter(ch => ch.name.toLowerCase().includes(term));
+  renderChannels(filtered);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderChannels();
+  setInterval(renderChannels, 5000); // تحديث المشاهدات كل 5 ثواني
+});
+</script>
+
 </body>
 </html>
