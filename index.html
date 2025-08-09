@@ -10,48 +10,128 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'Tajawal', sans-serif;
-    background: #000;
-    color: #fff;
+    background: #121212;
+    color: #ddd;
     overflow-x: hidden;
     padding-bottom: 100px;
   }
-  header { text-align: center; padding: 20px; color: #0ff; text-shadow: 0 0 10px #0ff; }
+  header {
+    text-align: center;
+    padding: 20px;
+    color: #4db6ac;
+    text-shadow: 0 0 8px #4db6ac;
+  }
   .search-box {
-    text-align: center; margin: 10px auto;
+    text-align: center;
+    margin: 10px auto;
   }
   .search-box input {
-    padding: 6px 10px; border-radius: 8px; border: none;
-    width: 80%; max-width: 300px; font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid #4db6ac;
+    width: 80%;
+    max-width: 320px;
+    font-size: 14px;
+    background: #222;
+    color: #ddd;
+  }
+  .search-box input::placeholder {
+    color: #aaa;
   }
   .channel-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px; padding: 10px; max-width: 800px; margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    padding: 10px;
+    max-width: 800px;
+    margin: auto;
   }
   .channel-card {
-    position: relative; background: rgba(255,255,255,0.05);
-    border: 2px solid #0ff; border-radius: 10px; padding: 8px;
-    text-align: center; font-size: 12px; transition: 0.3s; transform: scale(0.9);
+    position: relative;
+    background: #1e1e1e;
+    border: 2px solid #4db6ac;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    transition: 0.3s;
+    transform: scale(0.95);
+    color: #ddd;
   }
-  .channel-card:hover { transform: scale(0.95); box-shadow: 0 0 15px #0ff; }
-  .live-tag { position: absolute; top: 5px; left: 5px;
-    background: red; color: #fff; font-size: 10px;
-    padding: 2px 5px; border-radius: 4px;
+  .channel-card:hover {
+    transform: scale(1);
+    box-shadow: 0 0 15px #4db6ac;
+    border-color: #26a69a;
+  }
+  .live-tag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #d32f2f;
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  button {
+    background: #26a69a;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #1d7c73;
   }
   .popup-player {
-    display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); background: #000;
-    padding: 10px; border-radius: 10px; z-index: 9999;
-    width: 90%; max-width: 800px;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #121212;
+    padding: 15px;
+    border-radius: 15px;
+    z-index: 9999;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 0 25px #26a69a;
   }
-  .popup-player video { width: 100%; border-radius: 10px; }
+  .popup-player video {
+    width: 100%;
+    border-radius: 15px;
+    background: #000;
+  }
   .close-btn {
-    background: red; color: #fff; border: none; padding: 4px 10px;
-    border-radius: 6px; cursor: pointer; margin-top: 5px;
+    background: #d32f2f;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 600;
   }
   .refresh-btn {
-    background: #00cccc; color: #000; border: none;
-    padding: 6px 12px; border-radius: 8px;
-    font-size: 14px; cursor: pointer;
+    background: #4db6ac;
+    color: #121212;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s;
+  }
+  .refresh-btn:hover {
+    background: #26a69a;
+    color: #fff;
   }
 </style>
 </head>
@@ -59,7 +139,7 @@
 
 <header>
   <h1>⚽ لايف سبورت</h1>
-  <p>📣 تابعنا على <a href="https://t.me/alialiah123456" target="_blank">التليجرام</a></p>
+  <p>📣 تابعنا على <a href="https://t.me/alialiah123456" target="_blank" style="color:#4db6ac;">التليجرام</a></p>
   <button class="refresh-btn" onclick="location.reload()">🔄 تحديث الصفحة</button>
 </header>
 
@@ -72,16 +152,17 @@
 <div class="popup-player" id="popupPlayer">
   <video id="mainPlayer" controls autoplay></video>
   <br>
-  <button onclick="document.getElementById('mainPlayer').requestFullscreen()" style="background:#0ff;color:#000;padding:6px 12px;border:none;border-radius:8px;cursor:pointer;">⛶ ملء الشاشة</button>
+  <button onclick="document.getElementById('mainPlayer').requestFullscreen()">⛶ ملء الشاشة</button>
   <button class="close-btn" onclick="closePopup()">❌ إغلاق</button>
 </div>
 
 <script>
 // ترتيب القنوات
 const channels = [
-  { name: 'سبورت 15', quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6124/index.m3u8'' },
-  { name: 'سبورت 16', quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6131/index.m3u8' },
-  { name: 'سبورت 13', quality: 'HD', url: 'http://125x.org:8080/bn2hd/tracks-v1a1/mono.m3u8' },
+  { name: 'live tv 1', quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6124/index.m3u8' },
+  { name: 'live tv 2', quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6131/index.m3u8' },
+  { name: 'live tv 3', quality: 'HD', url: 'http://125x.org:8080/bn2hd/tracks-v1a1/mono.m3u8' },
+  { name: 'live tv 4', quality: 'HD', url: 'https://solhtvhls.wns.live/hls/stream.m3u8' },
   { name: 'سبورت 1',  quality: 'HD', url: 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8' },
   { name: 'سبورت 2',  quality: 'HD', url: 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/adaptive.m3u8' },
   { name: 'سبورت 3',  quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6124/index.m3u8' },
@@ -93,53 +174,20 @@ const channels = [
   { name: 'سبورت 9',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12252/index.m3u8' },
   { name: 'سبورت 10', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/6123/index.m3u8' },
   { name: 'سبورت 11', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/2353/index.m3u8' },
-  { name: 'سبورت 12', quality: 'HD', url: 'http://iptv.nextnet.krd:25461/live/12920/4516/4690.m3u8' },
-  { name: 'سبورت 14', quality: 'HD', url: 'https://solhtvhls.wns.live/hls/stream.m3u8' }
+  { name: 'سبورت 12', quality: 'HD', url: 'http://iptv.nextnet.krd:25461/live/12920/4516/4690.m3u8' }
 ];
 
-// مشاهدات القنوات
-let channelViews = {};
-channels.forEach(ch => {
-  channelViews[ch.name] = Math.floor(Math.random() * (4000 - 100 + 1)) + 100;
-});
-
-// تحديث المشاهدات
-function updateViews() {
-  for (let ch in channelViews) {
-    let change = Math.floor(Math.random() * 101) - 50; // من -50 إلى +50
-    channelViews[ch] += change;
-    if (channelViews[ch] < 100) channelViews[ch] = 100;
-    if (channelViews[ch] > 4000) channelViews[ch] = 4000;
-  }
-}
-
-// التحقق من الوقت المسموح
-function isViewTime() {
-  let now = new Date();
-  let options = { timeZone: 'Asia/Baghdad', hour12: false };
-  let timeStr = now.toLocaleTimeString('en-GB', options);
-  let [hour, minute] = timeStr.split(':').map(Number);
-
-  return (hour >= 15 || hour < 1 || (hour === 1 && minute <= 30));
-}
-
 // عرض القنوات
 function renderChannels(list = channels) {
-  updateViews();
   const container = document.getElementById('channelGrid');
   container.innerHTML = '';
   list.forEach(ch => {
-    let viewsHTML = '';
-    if (isViewTime()) {
-      viewsHTML = `<p style="font-size:11px;color:#0ff;">👁️ ${channelViews[ch.name]} مشاهد</p>`;
-    }
     const card = document.createElement('div');
     card.className = 'channel-card';
     card.innerHTML = `
       <div class="live-tag">مباشر</div>
       <h3>${ch.name}</h3>
-      ${viewsHTML}
-      <p style="font-size:11px;color:yellow;">${ch.quality}</p>
+      <p style="font-size:11px;color:#80cbc4;">${ch.quality}</p>
       <button onclick="openPopup('${ch.url}')">مشاهدة</button>
     `;
     container.appendChild(card);
@@ -170,94 +218,6 @@ document.getElementById('searchInput').addEventListener('input', function() {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderChannels();
-  setInterval(renderChannels, 5000); // تحديث المشاهدات كل 5 ثواني
-});
-</script>
-
-<!-- Statcounter Code Start -->
-<script type="text/javascript">
-var sc_project=13157668; 
-var sc_invisible=0; 
-var sc_security="e22a1f62"; 
-var scJsHost = (("https:" == document.location.protocol) ? "https://" : "http://");
-document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript><div class="statcounter"><a title="Web Analytics"
-href="https://statcounter.com/" target="_blank"><img class="statcounter"
-src="https://c.statcounter.com/13157668/0/e22a1f62/0/" alt="Web Analytics"
-referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-<!-- Statcounter Code End -->
-
-</body>
-</html>// تحديث المشاهدات
-function updateViews() {
-  for (let ch in channelViews) {
-    let change = Math.floor(Math.random() * 101) - 50; // من -50 إلى +50
-    channelViews[ch] += change;
-    if (channelViews[ch] < 100) channelViews[ch] = 100;
-    if (channelViews[ch] > 4000) channelViews[ch] = 4000;
-  }
-}
-
-// التحقق من الوقت المسموح
-function isViewTime() {
-  let now = new Date();
-  let options = { timeZone: 'Asia/Baghdad', hour12: false };
-  let timeStr = now.toLocaleTimeString('en-GB', options);
-  let [hour, minute] = timeStr.split(':').map(Number);
-
-  return (hour >= 15 || hour < 1 || (hour === 1 && minute <= 30));
-}
-
-// عرض القنوات
-function renderChannels(list = channels) {
-  updateViews();
-  const container = document.getElementById('channelGrid');
-  container.innerHTML = '';
-  list.forEach(ch => {
-    let viewsHTML = '';
-    if (isViewTime()) {
-      viewsHTML = `<p style="font-size:11px;color:#0ff;">👁️ ${channelViews[ch.name]} مشاهد</p>`;
-    }
-    const card = document.createElement('div');
-    card.className = 'channel-card';
-    card.innerHTML = `
-      <div class="live-tag">مباشر</div>
-      <h3>${ch.name}</h3>
-      ${viewsHTML}
-      <p style="font-size:11px;color:yellow;">${ch.quality}</p>
-      <button onclick="openPopup('${ch.url}')">مشاهدة</button>
-    `;
-    container.appendChild(card);
-  });
-}
-
-// مشغل الفيديو
-function openPopup(url) {
-  const popup = document.getElementById('popupPlayer');
-  const player = document.getElementById('mainPlayer');
-  player.src = url;
-  popup.style.display = 'block';
-}
-function closePopup() {
-  const popup = document.getElementById('popupPlayer');
-  const player = document.getElementById('mainPlayer');
-  player.pause();
-  player.src = '';
-  popup.style.display = 'none';
-}
-
-// البحث
-document.getElementById('searchInput').addEventListener('input', function() {
-  const term = this.value.toLowerCase();
-  const filtered = channels.filter(ch => ch.name.toLowerCase().includes(term));
-  renderChannels(filtered);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderChannels();
-  setInterval(renderChannels, 5000); // تحديث المشاهدات كل 5 ثواني
 });
 </script>
 
