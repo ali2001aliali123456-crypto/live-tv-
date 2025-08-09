@@ -133,11 +133,6 @@
     background: #26a69a;
     color: #fff;
   }
-
-  /* تعليقات: تنسيق بسيط */
-  #comments-section { margin-top: 30px; }
-  #comments-list p { margin: 6px 0; color: #ddd; }
-  #comments-list .meta { font-size:11px; color:#9e9e9e; margin-bottom:4px; }
 </style>
 </head>
 <body>
@@ -154,7 +149,7 @@
 
 <section class="channel-grid" id="channelGrid"></section>
 
-<!-- قسم التعليقات (موجود في الصفحة) -->
+<!-- قسم التعليقات -->
 <div id="comments-section" style="max-width:800px;margin:auto;padding:20px;">
   <h2 style="color:#4db6ac;text-align:center;">💬 التعليقات</h2>
   <form id="comment-form">
@@ -172,7 +167,6 @@
 </div>
 
 <script>
-/* --- قنوات (مثل ما أرسلت) --- */
 const channels = [
   { name: 'قناة 1', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/varzeshtest.m3u8' },
   { name: 'قناة 2', quality: 'HD', url: 'https://solhtvhls.wns.live/hls/stream.m3u8' },
@@ -226,122 +220,84 @@ document.addEventListener('DOMContentLoaded', () => {
   renderChannels();
 });
 
-/* =========================
-   نظام التعليقات عبر JSONBin
-   ========================= */
-
-/* بيانات الـ bin (جاهزة) */
-const BIN_ID = "66bdef64acd3cb34a8831691";
-const API_KEY = "$2a$10$ZzNw0Q/7AwrY7YGP4TzW1u1DgxN1b3i6kJrJD8t0JQGAtT4Stq5Fi";
+// ===== التعليقات الحقيقية عبر JSONBin =====
+const BIN_ID = "6897562143b1c97be91a4196";
+const API_KEY = "$2a$10$vF8U.bXLL3PmmvTRQknAJOWs8Yj52rkDgDIUfg2elLiXOQgvvwRDS";
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-const commentForm = document.getElementById('comment-form');
-const commentText = document.getElementById('comment-text');
-const commentsList = document.getElementById('comments-list');
-const submitBtn = document.getElementById('comment-submit');
-
-/* دالة لتشفير النص حتى ما يسمح بعرض HTML خام (حماية XSS) */
 function escapeHtml(str) {
   if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
 }
 
-/* جلب بيانات البين */
 async function getBinRecord() {
   try {
     const res = await fetch(API_URL, {
       headers: { "X-Master-Key": API_KEY }
     });
-    if (!res.ok) {
-      console.error('JSONBin GET error', res.status);
-      return { comments: [] };
-    }
+    if (!res.ok) return { comments: [] };
     const data = await res.json();
     return data.record || { comments: [] };
-  } catch (err) {
-    console.error('getBinRecord error', err);
+  } catch {
     return { comments: [] };
   }
 }
 
-/* تحميل وعرض التعليقات */
 async function loadComments() {
   commentsList.innerHTML = '<p style="color:#9e9e9e">جارٍ تحميل التعليقات...</p>';
   const record = await getBinRecord();
   const arr = Array.isArray(record.comments) ? record.comments : [];
-  if (arr.length === 0) {
-    commentsList.innerHTML = '<p style="color:#9e9e9e">لا توجد تعليقات بعد. كُن أول من يعلق!</p>';
+  if (!arr.length) {
+    commentsList.innerHTML = '<p style="color:#9e9e9e">لا توجد تعليقات بعد.</p>';
     return;
   }
   commentsList.innerHTML = arr.map(c => {
-    // كل تعليق نعرضه بعد تشفيره
-    return `<div><div class="meta">${escapeHtml(c.name || 'مجهول')} — ${escapeHtml(c.time || '')}</div><p>${escapeHtml(c.text)}</p></div>`;
+    return `<div style="border-bottom:1px solid #444;padding:8px 0;">
+              <div style="color:#80cbc4;font-size:12px;">${escapeHtml(c.name)} — ${escapeHtml(c.time)}</div>
+              <p style="margin:5px 0;">${escapeHtml(c.text)}</p>
+            </div>`;
   }).join('');
 }
 
-/* وظيفة لإضافة تعليق جديد */
 async function addCommentToBin(text) {
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'جاري النشر...';
-  try {
-    // جلب أحدث نسخة حتى لا نكتب فوق أي تحديث
-    const record = await getBinRecord();
-    const arr = Array.isArray(record.comments) ? record.comments : [];
+  const record = await getBinRecord();
+  const arr = Array.isArray(record.comments) ? record.comments : [];
 
-    // إضافة تعليق مع وقت واسم افتراضي
-    const newComment = {
-      name: 'زائر',
-      time: (new Date()).toLocaleString('ar-EG'),
-      text: text
-    };
-    arr.push(newComment);
+  arr.push({
+    name: 'زائر',
+    time: new Date().toLocaleString('ar-EG'),
+    text: text
+  });
 
-    // ارفع النسخة المحدثة (PUT)
-    const putRes = await fetch(API_URL, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": API_KEY
-      },
-      body: JSON.stringify({ comments: arr })
-    });
+  await fetch(API_URL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": API_KEY
+    },
+    body: JSON.stringify({ comments: arr })
+  });
 
-    if (!putRes.ok) {
-      throw new Error('فشل تحديث التعليقات');
-    }
-
-    // إعادة تحميل التعليقات بعد الإضافة
-    await loadComments();
-  } catch (err) {
-    console.error('addCommentToBin error', err);
-    alert('تعذر نشر التعليق الآن، حاول لاحقًا.');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'نشر';
-  }
+  commentText.value = '';
+  loadComments();
 }
 
-/* معالجة فرم التعليق */
-commentForm.addEventListener('submit', async (e) => {
+commentForm.addEventListener('submit', async e => {
   e.preventDefault();
-  const text = commentText.value.trim();
-  if (!text) {
-    alert('الرجاء كتابة تعليق.');
-    return;
-  }
-  await addCommentToBin(text);
-  commentText.value = '';
+  const t = commentText.value.trim();
+  if (!t) return alert('اكتب تعليقًا أولاً.');
+  await addCommentToBin(t);
 });
 
-/* تحميل التعليقات عند بدء الصفحة */
+const commentForm = document.getElementById('comment-form');
+const commentText = document.getElementById('comment-text');
+const commentsList = document.getElementById('comments-list');
+
 loadComments();
-
 </script>
-
 </body>
 </html>
