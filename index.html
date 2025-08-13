@@ -1,231 +1,55 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>📺 لايف سبورت</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background-color: #121212;
-      color: #fff;
-      font-family: 'Tajawal', sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      padding: 20px 10px;
-    }
-    header img {
-      max-width: 120px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #d32f2f;
-    }
-    header h1 {
-      font-size: 28px;
-      color: #ff5252;
-      margin: 0;
-    }
-    .telegram {
-      margin: 10px 0;
-      font-size: 14px;
-      color: #80cbc4;
-    }
-    .refresh-btn {
-      background-color: #4db6ac;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 10px 0;
-    }
-    .search-bar {
-      margin: 15px 0;
-    }
-    .search-bar input {
-      padding: 8px;
-      width: 80%;
-      max-width: 300px;
-      border-radius: 6px;
-      border: none;
-      font-size: 14px;
-      background-color: #222;
-      color: #fff;
-    }
-    .channel-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-    .channel-card {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 0 10px #4db6ac;
-      text-align: center;
-      position: relative;
-    }
-    .channel-card img.logo {
-      max-width: 60px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      box-shadow: 0 0 6px #d32f2f;
-    }
-    .live-tag {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background-color: #d32f2f;
-      color: #fff;
-      font-size: 11px;
-      padding: 3px 6px;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-    .channel-card h3 {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-    .channel-card p {
-      font-size: 12px;
-      color: #80cbc4;
-      margin: 4px 0;
-    }
-    .channel-card button {
-      background-color: #4db6ac;
-      color: #000;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .popup-player {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #121212;
-      padding: 15px;
-      border-radius: 15px;
-      z-index: 9999;
-      width: 90%;
-      max-width: 800px;
-      box-shadow: 0 0 25px #26a69a;
-    }
-    .popup-player img {
-      max-width: 100px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #d32f2f;
-    }
-    .popup-player video {
-      width: 100%;
-      border-radius: 15px;
-      background-color: #000;
-    }
-    .close-btn {
-      background-color: #d32f2f;
-      color: #fff;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📺 بث مباشر القناة 1</title>
+<style>
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: #0f172a;
+    color: #f8f8f8;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  video {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    background: #000;
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <img src="https://livetvali.neocities.org/1754740387347.jpg" alt="شعار لايف سبورت">
-    <h1>لايف سبورت ⚽</h1>
-    <div class="telegram">📢 تابعنا على <a href="https://t.me/alialiah123456" target="_blank" style="color:#4db6ac;">التليجرام</a></div>
-    <button class="refresh-btn" onclick="renderChannels()">🔄 تحديث الصفحة</button>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="🔍 ابحث عن قناة..." oninput="searchChannels()">
-    </div>
-  </header>
+<h1>📺 بث مباشر القناة 1</h1>
+<video id="video1" controls></video>
 
-  <section class="channel-grid" id="channelGrid"></section>
-
-  <div class="popup-player" id="popupPlayer">
-    <img src="https://livetvali.neocities.org/1754740387347.jpg" alt="شعار القناة الناقلة">
-    <video id="mainPlayer" controls autoplay></video>
-    <br>
-    <button onclick="document.getElementById('mainPlayer').requestFullscreen()">⛶ ملء الشاشة</button>
-    <button class="close-btn" onclick="closePopup()">❌ إغلاق</button>
-  </div>
-
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
-    const channels = [
-      { name: 'live tv 1', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/varzeshtest.m3u8' },
-      { name: 'live tv 2', quality: 'HD', url: 'https://stream.sainaertebat.com/hls2/tv3test.m3u8' },
-      { name: 'live tv 3', quality: 'HD', url: 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8' },
-      { name: 'live tv 4', quality: 'HD', url: 'https://solhtvhls.wns.live/hls/stream.m3u8' },
-      { name: 'سبورت 1',  quality: 'HD', url: 'https://svs.itworkscdn.net/smc4sportslive/smc4.smil/playlist.m3u8?v=a9e0204c' },
-      { name: 'سبورت 2',  quality: 'HD', url: 'https://dmitwlvvll.cdn.mgmlcdn.com:443/dubaisportshd5/smil:dubaisportshd5.smil/chunklist_b1600000.m3u8' },
-      { name: 'سبورت 3',  quality: 'HD', url: 'https://dl23.mp4.ir/video/2025/8/321750-942824039/m3u8/1080p/out.m3u8' },
-      { name: 'سبورت 4',  quality: 'HD', url: 'http://7955e15a.rostelekom.xyz/iptv/L58NZSUP5Z4Z98/6131/index.m3u8' },
-      { name: 'سبورت 5',  quality: 'SD', url: 'http://125x.org:8080/bn2hd/tracks-v1a1/mono.m3u8' },
-      { name: 'سبورت 6',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12250/index.m3u8' },
-      { name: 'سبورت 7',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/6124/index.m3u8' },
-      { name: 'سبورت 8',  quality: 'HD', url: 'https://dokko1new.newkso.ru/dokko1/premium91/mono.m3u8' },
-      { name: 'سبورت 9',  quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/12252/index.m3u8' },
-      { name: 'سبورت 10', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/6123/index.m3u8' },
-      { name: 'سبورت 11', quality: 'HD', url: 'http://cd7n120x.socminlt.com/iptv/YDFRWUQHUKMN2V/2353/index.m3u8' },
-      { name: 'سبورت 12', quality: 'HD', url: 'http://iptv.nextnet.krd:25461/live/12920/4516/4690.m3u8' }
-    ];
+const video = document.getElementById('video1');
+const streamURL = 'https://stream.veo.buzz:6072/sport/ch1/adaptive.m3u8';
 
-    function renderChannels(list = channels) {
-      const container = document.getElementById('channelGrid');
-      container.innerHTML = '';
-      list.forEach(ch => {
-        const card = document.createElement('div');
-        card.className = 'channel-card';
-        card.innerHTML = `
-          <img src="https://livetvali.neocities.org/1754740387347.jpg" class="logo" alt="شعار القناة">
-          <div class="live-tag">مباشر</div>  
-          <h3>${ch.name}</h3>
-          <p>${ch.quality}</p>
-          <button onclick="openPopup('${ch.url}')">مشاهدة</button>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function openPopup(url) {
-      const popup = document.getElementById('popupPlayer');
-      const player = document.getElementById('mainPlayer');
-      player.src = url;
-      popup.style.display = 'block';
-    }
-
-    function closePopup() {
-      const popup = document.getElementById('popupPlayer');
-      const player = document.getElementById('mainPlayer');
-      player.pause();
-      player.src = '';
-      popup.style.display = 'none';
-    }
-
-    function searchChannels() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = channels.filter(ch => ch.name.toLowerCase().includes(query));
-      renderChannels(filtered);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderChannels();
-    });
+if (Hls.isSupported()) {
+  const hls = new Hls();
+  hls.loadSource(streamURL);
+  hls.attachMedia(video);
+  hls.on(Hls.Events.MANIFEST_PARSED, function() {
+    video.play();
+  });
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+  video.src = streamURL;
+  video.addEventListener('loadedmetadata', function() {
+    video.play();
+  });
+}
 </script>
 
 </body>
