@@ -3,53 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 بث مباشر القناة 1</title>
+<title>Live TV</title>
 <style>
-  body {
-    font-family: 'Tajawal', sans-serif;
-    background: #0f172a;
-    color: #f8f8f8;
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+body {
     margin: 0;
-    padding: 20px;
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(to bottom, #0f172a, #1e293b);
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  video {
+    min-height: 100vh;
+}
+
+header {
     width: 100%;
-    max-width: 800px;
-    border-radius: 10px;
-    background: #000;
-  }
+    padding: 20px;
+    background-color: #111827;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.player-container {
+    width: 90%;
+    max-width: 1000px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+video {
+    width: 100%;
+    border-radius: 15px;
+    background-color: #000;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+}
+
+.join-channel {
+    margin-top: 12px;
+    font-size: 1.1rem;
+}
+
+.join-channel a {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.channels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    width: 90%;
+    max-width: 1000px;
+    margin-top: 40px;
+}
+
+.channel {
+    background-color: #1f2937;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+.channel:hover {
+    transform: scale(1.05);
+    background-color: #374151;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.channel img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 8px;
+}
+
+.channel p {
+    margin: 5px 0;
+    font-weight: 700;
+}
+
+.channel button {
+    background-color: #0ea5e9;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.channel button:hover {
+    background-color: #0284c7;
+}
 </style>
 </head>
 <body>
 
-<h1>📺 بث مباشر القناة 1</h1>
-<video id="video1" controls></video>
+<header>Live TV</header>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<div class="player-container">
+    <video id="player" controls autoplay></video>
+    <div class="join-channel">
+        لمتابعة الحديث انضم لقناة التلي: 
+        <a href="https://t.me/alialiah123456" target="_blank">https://t.me/alialiah123456</a>
+    </div>
+</div>
+
+<div class="channels">
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 1">
+        <p>Sport 1</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6080/sport/ch1/adaptive.m3u8')">شغل القناة</button>
+    </div>
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 2">
+        <p>Sport 2</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6079/sport/ch2/adaptive.m3u8')">شغل القناة</button>
+    </div>
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 3">
+        <p>Sport 3</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8')">شغل القناة</button>
+    </div>
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 4">
+        <p>Sport 4</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8')">شغل القناة</button>
+    </div>
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 5">
+        <p>Sport 5</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8')">شغل القناة</button>
+    </div>
+    <div class="channel">
+        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 6">
+        <p>Sport 6</p>
+        <button onclick="playChannel('https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8')">شغل القناة</button>
+    </div>
+</div>
+
 <script>
-const video = document.getElementById('video1');
-const streamURL = 'https://stream.veo.buzz:6072/sport/ch1/adaptive.m3u8';
-
-if (Hls.isSupported()) {
-  const hls = new Hls();
-  hls.loadSource(streamURL);
-  hls.attachMedia(video);
-  hls.on(Hls.Events.MANIFEST_PARSED, function() {
-    video.play();
-  });
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-  video.src = streamURL;
-  video.addEventListener('loadedmetadata', function() {
-    video.play();
-  });
+function playChannel(url) {
+    const player = document.getElementById('player');
+    player.src = url;
+    player.play();
 }
+
+// تشغيل القناة الأولى تلقائيًا عند فتح الموقع
+window.addEventListener('load', function() {
+    playChannel('https://stream.veo.buzz:6080/sport/ch1/adaptive.m3u8');
+});
 </script>
 
 </body>
