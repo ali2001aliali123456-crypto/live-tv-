@@ -1,381 +1,91 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live TV</title>
+<title>نقاط فريق الدوري - نسخة تجريبية</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-    font-family: 'Tajawal', sans-serif;
-    background: linear-gradient(90deg, #0a1f44, #0f3b66);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
-
-header {
-    width: 100%;
-    padding: 25px;
-    background-color: #081634;
-    text-align: center;
-    font-size: 2.2rem;
-    font-weight: 700;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    letter-spacing: 1px;
-}
-
-.player-container {
-    width: 90%;
-    max-width: 1000px;
-    margin-top: 30px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-video {
-    width: 100%;
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    background-color: #000;
-}
-
-.channel-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border-radius: 25px;
-    background: rgba(0,0,0,0.2);
-    pointer-events: none;
-}
-
-.channel-name {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(90deg,#ff7f50,#1e90ff);
-    padding: 12px 24px;
-    border-radius: 20px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    z-index: 2;
-    transition: opacity 0.5s, transform 0.3s;
-}
-
-.channel-name.big {
-    font-size: 1.2rem; /* تصغير حجم الخط */
-    padding: 8px 16px; /* تقليل المسافة حول النص */
-    top: 5px; /* رفعه للأعلى */
-}
-
-.join-channel {
-    margin-top: 15px;
-    font-size: 1.15rem;
-}
-
-.join-channel a {
-    color: #ffd700;
-    text-decoration: none;
-    font-weight: 700;
-}
-
-.channels {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 25px;
-    width: 90%;
-    max-width: 1000px;
-    margin-top: 50px;
-}
-
-.channel {
-    background: linear-gradient(135deg, #0f3b66, #205081);
-    border-radius: 25px;
-    padding: 18px;
-    text-align: center;
-    transition: transform 0.35s, box-shadow 0.35s, background 0.35s;
-    cursor: pointer;
-}
-
-.channel:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-    background: linear-gradient(135deg,#1e90ff,#ff7f50);
-}
-
-.channel img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    transition: transform 0.35s;
-}
-
-.channel img:hover { transform: scale(1.3); }
-
-.channel p { margin: 6px 0; font-weight: 700; }
-
-.channel button {
-    background-color: #ffd700;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 18px;
-    color: #081634;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.channel button:hover { background-color: #ff8c00; }
-
-.channel.active { background: linear-gradient(135deg, #ff4500,#1e90ff); }
-
-/* زر ملء الشاشة */
-.fullscreen-btn {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background: rgba(0, 0, 0, 0.6);
-    border: none;
-    color: white;
-    font-size: 1.4rem;
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 3;
-    transition: background 0.3s;
-}
-.fullscreen-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* متجاوب للهواتف */
-@media (max-width: 600px) {
-    .channels { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 18px; }
-    .channel img { width: 35px; height: 35px; }
-    .channel button { padding: 7px 12px; font-size: 0.9rem; }
-}
+body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+table { margin: auto; border-collapse: collapse; width: 90%; }
+th, td { border: 1px solid #ccc; padding: 8px; }
+th { background-color: #f4f4f4; }
+thead th { position: sticky; top: 0; background: #f4f4f4; }
 </style>
 </head>
 <body>
-
-<header>Live TV</header>
-
-<div class="player-container">
-    <div class="channel-overlay"></div>
-    <div class="channel-name big" id="channelName">Sport 7</div>
-    <video id="player" controls autoplay></video>
-    <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
-    <div class="join-channel">
-        لمتابعة الحديث انضم لقناة التلي: 
-        <a href="https://t.me/alialiah123456" target="_blank">https://t.me/alialiah123456</a>
-    </div>
-</div>
-
-<div class="channels" id="channelsGrid">
-    <div class="channel" data-name="Sport 1" data-url="https://stream.veo.buzz:6080/sport/ch1/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 1">
-        <p>Sport 1</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 2" data-url="https://stream.veo.buzz:6079/sport/ch2/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 2">
-        <p>Sport 2</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 3" data-url="https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 3">
-        <p>Sport 3</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 4" data-url="https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 4">
-        <p>Sport 4</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 5" data-url="https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 5">
-        <p>Sport 5</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 6" data-url="https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 6">
-        <p>Sport 6</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 7" data-url="http://192.168.0.110:30001/file/srXkjZUq/video.m3u">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 7">
-        <p>Sport 7</p>
-        <button>شغل القناة</button>
-    </div>
-</div>
+<h1>نقاط فريقكم في الدوري</h1>
+<p>تحديث تلقائي كل 60 ثانية</p>
+<table id="pointsTable">
+<thead>
+<tr>
+<th>اللاعب</th>
+<th>نقاط مجموع الجولات</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 
 <script>
-const player = document.getElementById('player');
-const channelName = document.getElementById('channelName');
-const channelsGrid = document.getElementById('channelsGrid');
-const channelElems = channelsGrid.querySelectorAll('.channel');
+const teamIds = [1679569, 1794623, 6154272, 6099187, 7327, 812591, 70862, 6273627];
+const updateInterval = 60000; // 60 ثانية
 
-function playChannel(name, url, elem) {
-    player.src = url;
-    player.play();
-    channelName.textContent = name;
-    localStorage.setItem('lastChannel', JSON.stringify({name: name, url: url}));
-    channelElems.forEach(c => c.classList.remove('active'));
-    if(elem) elem.classList.add('active');
+async function fetchPlayerPoints(teamId, eventId) {
+    const teamData = await fetch(`https://fantasy.premierleague.com/api/entry/${teamId}/event/${eventId}/`).then(res => res.json());
+    const picks = teamData.picks;
+    let playerPoints = [];
+
+    for (let pick of picks) {
+        const playerId = pick.element;
+        const playerInfo = await fetch(`https://fantasy.premierleague.com/api/element-summary/${playerId}/`).then(res => res.json());
+        const history = playerInfo.history.filter(h => h.round === eventId);
+        let total = 0;
+        history.forEach(h => total += h.total_points);
+        playerPoints.push({name: playerInfo.web_name, totalPoints: total});
+    }
+    return playerPoints;
 }
 
-channelElems.forEach(c => {
-    const btn = c.querySelector('button');
-    btn.addEventListener('click', () => playChannel(c.dataset.name, c.dataset.url, c));
-});
+async function loadAllPoints() {
+    const tbody = document.querySelector('#pointsTable tbody');
+    tbody.innerHTML = '';
+    let totalTeamPoints = 0;
+    let allPlayers = {};
 
-window.addEventListener('load', () => {
-    const last = JSON.parse(localStorage.getItem('lastChannel'));
-    if(last && last.url){
-        const elem = Array.from(channelElems).find(c => c.dataset.url === last.url);
-        playChannel(last.name,last.url,elem);
-    } else {
-        const defaultElem = Array.from(channelElems).find(c => c.dataset.name === "Sport 7");
-        playChannel('Sport 7','http://192.168.0.110:30001/file/srXkjZUq/video.m3u',defaultElem);
-    }
-});
+    const bootstrap = await fetch('https://fantasy.premierleague.com/api/bootstrap-static/').then(res => res.json());
+    let currentEvent = bootstrap.events.find(e => e.is_current);
 
-// زر ملء الشاشة
-document.getElementById('fullscreenBtn').addEventListener('click', () => {
-    if (player.requestFullscreen) {
-        player.requestFullscreen();
-    } else if (player.webkitRequestFullscreen) { 
-        player.webkitRequestFullscreen();
-    } else if (player.msRequestFullscreen) { 
-        player.msRequestFullscreen();
+    // إذا الموسم ما بدأ، نجيب آخر جولة من الموسم الماضي
+    if (!currentEvent) {
+        currentEvent = bootstrap.events[bootstrap.events.length - 1];
     }
-});
+
+    const eventId = currentEvent.id;
+
+    for (let teamId of teamIds) {
+        try {
+            const players = await fetchPlayerPoints(teamId, eventId);
+            players.forEach(p => {
+                if(!allPlayers[p.name]) allPlayers[p.name] = 0;
+                allPlayers[p.name] += p.totalPoints;
+            });
+        } catch(err) {
+            console.error(`خطأ في Team ID ${teamId}`, err);
+        }
+    }
+
+    for (let [name, points] of Object.entries(allPlayers)) {
+        totalTeamPoints += points;
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${name}</td><td>${points}</td>`;
+        tbody.appendChild(row);
+    }
+
+    const totalRow = document.createElement('tr');
+    totalRow.innerHTML = `<th>المجموع الكلي للفريق</th><th>${totalTeamPoints}</th>`;
+    tbody.appendChild(totalRow);
+}
+
+loadAllPoints();
+setInterval(loadAllPoints, updateInterval);
 </script>
-
-</body>
-</html>
-.channel img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    transition: transform 0.35s;
-}
-
-.channel img:hover { transform: scale(1.3); }
-
-.channel p { margin: 6px 0; font-weight: 700; }
-
-.channel button {
-    background-color: #ffd700;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 18px;
-    color: #081634;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.channel button:hover { background-color: #ff8c00; }
-
-.channel.active { background: linear-gradient(135deg, #ff4500,#1e90ff); }
-
-/* متجاوب للهواتف */
-@media (max-width: 600px) {
-    .channels { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 18px; }
-    .channel img { width: 35px; height: 35px; }
-    .channel button { padding: 7px 12px; font-size: 0.9rem; }
-}
-</style>
-</head>
-<body>
-
-<header>Live TV</header>
-
-<div class="player-container">
-    <div class="channel-overlay"></div>
-    <div class="channel-name" id="channelName">Sport 1</div>
-    <video id="player" controls autoplay></video>
-    <div class="join-channel">
-        لمتابعة الحديث انضم لقناة التلي: 
-        <a href="https://t.me/alialiah123456" target="_blank">https://t.me/alialiah123456</a>
-    </div>
-</div>
-
-<div class="channels" id="channelsGrid">
-    <div class="channel" data-name="Sport 1" data-url="https://stream.veo.buzz:6080/sport/ch1/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 1">
-        <p>Sport 1</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 2" data-url="https://stream.veo.buzz:6079/sport/ch2/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 2">
-        <p>Sport 2</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 3" data-url="https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 3">
-        <p>Sport 3</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 4" data-url="https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 4">
-        <p>Sport 4</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 5" data-url="https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 5">
-        <p>Sport 5</p>
-        <button>شغل القناة</button>
-    </div>
-    <div class="channel" data-name="Sport 6" data-url="https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8">
-        <img src="https://cdn-icons-png.flaticon.com/512/0/375.png" alt="Sport 6">
-        <p>Sport 6</p>
-        <button>شغل القناة</button>
-    </div>
-</div>
-
-<script>
-const player = document.getElementById('player');
-const channelName = document.getElementById('channelName');
-const channelsGrid = document.getElementById('channelsGrid');
-const channelElems = channelsGrid.querySelectorAll('.channel');
-
-function playChannel(name, url, elem) {
-    player.src = url;
-    player.play();
-    channelName.textContent = name;
-    localStorage.setItem('lastChannel', JSON.stringify({name: name, url: url}));
-    channelElems.forEach(c => c.classList.remove('active'));
-    if(elem) elem.classList.add('active');
-}
-
-channelElems.forEach(c => {
-    const btn = c.querySelector('button');
-    btn.addEventListener('click', () => playChannel(c.dataset.name, c.dataset.url, c));
-});
-
-window.addEventListener('load', () => {
-    const last = JSON.parse(localStorage.getItem('lastChannel'));
-    if(last && last.url){
-        const elem = Array.from(channelElems).find(c => c.dataset.url === last.url);
-        playChannel(last.name,last.url,elem);
-    } else {
-        playChannel('Sport 1','https://stream.veo.buzz:6080/sport/ch1/adaptive.m3u8',channelElems[0]);
-    }
-});
-</script>
-
 </body>
 </html>
