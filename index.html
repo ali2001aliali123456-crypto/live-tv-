@@ -1,144 +1,174 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
 <title>📺 Live TV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  body {
+body {
     background: #111;
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 20px;
     text-align: center;
-  }
+}
 
-  h1 {
+h1 {
     color: #ff9800;
     font-size: 2em;
     margin-bottom: 20px;
-  }
+}
 
-  #player {
+#player-container {
+    position: relative;
+    display: inline-block;
     width: 90%;
     max-width: 800px;
+}
+
+#current-channel-name {
+    margin-bottom:10px; 
+    font-size:1.2em; 
+    font-weight:bold; 
+    color:#ff9800;
+}
+
+#player {
+    width: 100%;
     height: 350px;
     border-radius: 12px;
     border: 3px solid #ff9800;
     background: black;
-    margin-bottom: 30px;
-    transition: 0.3s;
-  }
+}
 
-  .channels {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 20px;
-    justify-items: center;
-    align-items: center;
-  }
-
-  .channel-container {
+#quality-bar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    transition: transform 0.3s;
-  }
+    gap: 10px;
+    z-index: 2;
+}
 
-  .channel-container:hover {
-    transform: translateY(-5px);
-  }
-
-  .channel-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.4em;
-    color: #111;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 4px 10px rgba(255,255,255,0.2);
-  }
-
-  /* تأثير الألوان المتدرجة */
-  .channel-icon:nth-child(1){background:#ff4d4d;}
-  .channel-icon:nth-child(2){background:#ff944d;}
-  .channel-icon:nth-child(3){background:#ffdb4d;}
-  .channel-icon:nth-child(4){background:#85ff4d;}
-  .channel-icon:nth-child(5){background:#4dffff;}
-  .channel-icon:nth-child(6){background:#4d4dff;}
-  .channel-icon:nth-child(7){background:#b84dff;}
-  .channel-icon:nth-child(8){background:#ff4dd2;}
-  .channel-icon:nth-child(9){background:#ff6f4d;}
-  .channel-icon:nth-child(10){background:#ffd24d;}
-  .channel-icon:nth-child(11){background:#4dff88;}
-  .channel-icon:nth-child(12){background:#4defff;}
-
-  .channel-icon:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,152,0,0.6);
-  }
-
-  select {
-    padding: 4px 6px;
-    border-radius: 5px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .channel-btn {
-    padding: 5px 10px;
-    background: #ff9800;
+.quality-btn {
+    padding: 5px 12px;
+    background: rgba(255,152,0,0.8);
     color: #111;
     font-weight: bold;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
-  }
+    transition: all 0.3s;
+}
 
-  .channel-btn:hover {
-    background: #ffc107;
-  }
+.quality-btn.active { background: #ffc107; }
+.quality-btn:hover { background: #ffd54f; }
 
-  .telegram-link {
-    margin-top: 40px;
+.channel-nav {
+    margin: 15px 0;
+}
+
+.channel-nav button {
+    padding: 8px 15px;
+    margin: 0 5px;
     font-size: 1.2em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #ff9800;
+    color: #111;
+    transition: 0.3s;
+}
+
+.channel-nav button:hover { background: #ffc107; }
+
+.channels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
+}
+
+.channel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.3s;
+}
+
+.channel-container:hover { transform: translateY(-3px); }
+
+.channel-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(255,255,255,0.2);
+    transition: 0.3s;
+}
+
+.channel-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.channel-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 25px rgba(255,152,0,0.4);
+}
+
+.channel-name { font-weight: bold; }
+
+.telegram-link {
+    margin-top: 30px;
+    font-size: 1.1em;
     color: #00bfff;
     text-decoration: none;
     font-weight: bold;
-    display: inline-block;
-    transition: 0.3s;
-  }
+}
 
-  .telegram-link:hover {
-    color: #1e90ff;
-    text-decoration: underline;
-  }
+.telegram-link:hover { color: #1e90ff; }
 
-  @media (max-width: 600px) {
-    #player { width: 100%; height: 300px; }
-  }
+@media (max-width: 600px) {
+    #player { height: 300px; }
+    .channel-icon { width: 50px; height: 50px; }
+    #quality-bar { flex-direction: column; top: 5px; right: 5px; }
+}
 </style>
 </head>
 <body>
 
 <h1>📺 Live TV</h1>
 
-<video id="player" controls autoplay></video>
+<div id="player-container">
+    <div id="current-channel-name"></div>
+    <video id="player" controls autoplay></video>
+    <div id="quality-bar"></div>
+</div>
+
+<div class="channel-nav">
+    <button onclick="prevChannel()">⏪</button>
+    <button onclick="nextChannel()">⏩</button>
+</div>
 
 <div class="channels" id="channels-container"></div>
 
 <script>
+const logoUrl = "https://llaaddzz.neocities.org/Bein_sport_logo.png";
+
+const channelColors = ['#ff4d4d','#ff944d','#ffdb4d','#85ff4d','#4dffff','#4d4dff','#b84dff','#ff4dd2','#ff6f4d','#ffd24d','#4dff88','#4defff'];
+
 const channels = [
-  {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8','http://125x.org:8080/bn1hd/index.m3u8']},
+  {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8']},
   {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8','https://stream.veo.buzz:6079/sport/ch2/adaptive.m3u8']},
   {name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_720.m3u8','https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8']},
   {name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8','https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_720.m3u8','https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8']},
@@ -153,36 +183,72 @@ const channels = [
 ];
 
 const container = document.getElementById('channels-container');
+const qualityBar = document.getElementById('quality-bar');
+const video = document.getElementById('player');
+const channelNameDisplay = document.getElementById('current-channel-name');
 
 channels.forEach((ch,i)=>{
   const div = document.createElement('div');
   div.className = 'channel-container';
   div.innerHTML = `
-    <div class="channel-icon" onclick="playSelected('live${i+1}')">${i+1}</div>
-    <div>${ch.name}</div>
-    <select id="live${i+1}">
-      ${ch.urls.map((url,j)=>{
-        let label = j===0 ? 'HD' : j===1 ? 'SD' : 'Veo HD';
-        return `<option value="${url}" ${j===0?'selected':''}>${label}</option>`;
-      }).join('')}
-    </select>
-    <button class="channel-btn" onclick="playSelected('live${i+1}')">تشغيل</button>
+    <div class="channel-icon" style="background:${channelColors[i]}" onclick="playChannel(${i})" title="${ch.name}">
+      <img src="${logoUrl}" alt="${ch.name}">
+    </div>
+    <div class="channel-name">${ch.name}</div>
   `;
   container.appendChild(div);
 });
 
-function playSelected(id){
-  const video = document.getElementById('player');
-  const select = document.getElementById(id);
-  video.src = select.value;
-  video.play();
+let currentChannel = 0;
+
+function updateQualityButtons(channelIndex){
+  qualityBar.innerHTML = '';
+  if(channelIndex<6){
+    const labels = ['HD','SD','Low'];
+    channels[channelIndex].urls.forEach((url,j)=>{
+      const btn = document.createElement('button');
+      btn.textContent = labels[j] || 'Low';
+      btn.className = 'quality-btn';
+      if(j===0) btn.classList.add('active');
+      btn.onclick = () => {
+        video.src = url;
+        video.play();
+        document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      qualityBar.appendChild(btn);
+    });
+  } else {
+    const btn = document.createElement('button');
+    btn.textContent = 'تشغيل';
+    btn.className = 'quality-btn active';
+    btn.onclick = () => { video.src = channels[channelIndex].urls[0]; video.play(); };
+    qualityBar.appendChild(btn);
+  }
 }
 
-// تشغيل القناة الأولى تلقائياً عند فتح الموقع
-window.addEventListener('load',()=>{playSelected('live1');});
+function playChannel(index){
+  currentChannel = index;
+  video.src = channels[index].urls[0];
+  video.play();
+  updateQualityButtons(index);
+  channelNameDisplay.textContent = channels[index].name;
+}
+
+// أزرار التنقل
+function prevChannel(){
+  currentChannel = (currentChannel-1+channels.length)%channels.length;
+  playChannel(currentChannel);
+}
+
+function nextChannel(){
+  currentChannel = (currentChannel+1)%channels.length;
+  playChannel(currentChannel);
+}
+
+window.addEventListener('load',()=>{ playChannel(0); });
 </script>
 
-<!-- رابط قناة التلي -->
 <a href="https://t.me/alialiah123456" target="_blank" class="telegram-link">
   انضم لقناة التلي لمتابعة المزيد
 </a>
