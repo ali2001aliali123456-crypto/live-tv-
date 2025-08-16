@@ -181,13 +181,14 @@ header .menu {
 <div class="channels" id="channels-container"></div>
 
 <script>
-const logoUrl = "https://llaaddzz.neocities.org/Bein_sport_logo.png";
+const barcaLogo = "https://llaaddzz.neocities.org/%D8%AA%D9%86%D8%B2%D9%8A%D9%84.png";
+
 const channelColors = ['#ff4d4d','#ff944d','#ffdb4d','#85ff4d','#4dffff','#4d4dff','#b84dff','#ff4dd2','#ff6f4d','#ffd24d','#4dff88','#4defff'];
 
 const channels = [
   {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8']},
-  {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2_720.m3u8']},
-  {name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_720.m3u8']},
+  {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8']},
+  {name:'برشلونة مباشر', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_720.m3u8']},
   {name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8']},
   {name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8']},
   {name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8']},
@@ -207,9 +208,13 @@ const channelNameDisplay = document.getElementById('current-channel-name');
 channels.forEach((ch,i)=>{
   const div = document.createElement('div');
   div.className = 'channel-container';
+
+  // شعار خاص لقناة برشلونة، باقي القنوات بدون شعار
+  const logo = (ch.name === 'برشلونة مباشر') ? barcaLogo : '';
+
   div.innerHTML = `
     <div class="channel-icon" style="background:${channelColors[i%channelColors.length]}" onclick="playChannel(${i})" title="${ch.name}">
-      <img src="${logoUrl}" alt="${ch.name}">
+      ${logo ? `<img src="${logo}" alt="${ch.name}">` : ''}
     </div>
     <div class="channel-name">${ch.name}</div>
   `;
@@ -260,24 +265,6 @@ window.addEventListener('load',()=>{ playChannel(0); });
 <div class="footer">
   جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
 </div>
-
-<!-- 🔹 Statcounter (مخفي) -->
-<script type="text/javascript">
-var sc_project=13157668; 
-var sc_invisible=1;   // ✅ مخفي
-var sc_security="e22a1f62"; 
-var scJsHost = "https://";
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript>
-  <div class="statcounter" style="display:none;">
-    <img class="statcounter"
-    src="https://c.statcounter.com/13157668/0/e22a1f62/1/"
-    alt="Web Analytics">
-  </div>
-</noscript>
 
 </body>
 </html>
