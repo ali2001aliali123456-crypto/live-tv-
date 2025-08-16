@@ -2,241 +2,243 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
-<title>📺 Live TV</title>
+<title>📺 Live TV — نسخة جديدة</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-body {
-    background: #111;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+:root{
+  --bg:#070707;
+  --card:#0f0f0f;
+  --accent:#ffcc00;
+  --muted:#9aa0a6;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:linear-gradient(180deg,#050505 0%, #0f0f12 100%);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-align:center;
 }
 
-/* 🔹 الهيدر */
-header {
-    background: #000;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid #ff0066;
+/* header */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+  gap:10px;
+  background:rgba(255,255,255,0.02);
+  border-bottom:1px solid rgba(255,255,255,0.03);
 }
-header .logo {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #ff0066;
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-header .menu {
-    font-size: 1.8em;
-    cursor: pointer;
-    color: #fff;
+.logo .dot{
+  width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#ff3366,#ffcc33);
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:#090909;
+  box-shadow:0 6px 18px rgba(255,102,102,0.12);
 }
-
-/* 🔹 مشغل الفيديو */
-#player-container {
-    position: relative;
-    width: 90%;
-    max-width: 800px;
-    margin: 15px auto;
+.logo h1{font-size:18px;margin:0;color:#ffdd66}
+.header-right{font-size:14px;color:var(--muted)}
+/* player area */
+.main{
+  width:95%;
+  max-width:980px;
+  margin:18px auto;
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
 }
-#current-channel-name {
-    margin-bottom:10px;
-    font-size:1.1em;
-    font-weight:bold;
-    color:#ff9800;
+.player-wrap{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  background:#000;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,255,255,0.03);
 }
-#player {
-    width: 100%;
-    aspect-ratio: 16/9;
-    border-radius: 12px;
-    border: 2px solid #ff9800;
-    background: black;
-    object-fit: cover;
+#player{
+  width:100%;
+  height:calc((100vw - 40px) * 9 / 16);
+  max-height:560px;
+  min-height:260px;
+  background:black;
+  display:block;
+  object-fit:cover;
 }
-
-/* 🔹 ازرار الجودة */
-#quality-bar {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-    z-index: 2;
+/* overlay channel name + badge */
+.player-overlay{
+  position:absolute;
+  left:16px;
+  top:16px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  z-index:5;
 }
-.quality-btn {
-    padding: 5px 12px;
-    background: rgba(255,152,0,0.8);
-    color: #111;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
+.channel-badge{
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:700;
+  color:#090909;
+  background:linear-gradient(90deg,#ffcc33,#ff6f61);
+  box-shadow:0 8px 30px rgba(255,140,80,0.12);
 }
-.quality-btn.active { background: #ffc107; }
-.quality-btn:hover { background: #ffd54f; }
-
-/* 🔹 تنقل بين القنوات */
-.channel-nav {
-    margin: 15px 0;
-}
-.channel-nav button {
-    padding: 8px 15px;
-    margin: 0 5px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    background: #ff9800;
-    color: #111;
-    transition: 0.3s;
-}
-.channel-nav button:hover { background: #ffc107; }
-
-/* 🔹 شبكة القنوات */
-.channels {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 15px;
-    justify-items: center;
-    margin-top: 10px;
-}
-.channel-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    transition: transform 0.3s;
-}
-.channel-container:hover { transform: translateY(-3px); }
-.channel-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 8px rgba(255,255,255,0.2);
-    transition: 0.3s;
-}
-.channel-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.channel-icon:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 25px rgba(255,152,0,0.4);
-}
-.channel-name { font-weight: bold; }
-
-/* 🔹 نافذة الترحيب */
-#welcome-popup {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background: rgba(0,0,0,0.9);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-}
-#welcome-popup h2 {
-    color:#ff9800;
-    margin-bottom:20px;
-}
-#welcome-popup a {
-    display:inline-block;
-    background:#ff0066;
-    color:#fff;
-    padding:10px 20px;
-    border-radius:8px;
-    font-weight:bold;
-    text-decoration:none;
-    transition:0.3s;
-}
-#welcome-popup a:hover { background:#ff3385; }
-#welcome-popup button {
-    margin-top:15px;
-    padding:8px 15px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:bold;
-    background:#ff9800;
-    color:#111;
+.channel-title{
+  background:rgba(0,0,0,0.45);
+  padding:8px 12px;
+  border-radius:10px;
+  color:#ffdca3;
+  font-weight:700;
+  backdrop-filter: blur(4px);
+  border:1px solid rgba(255,255,255,0.03);
 }
 
-/* 🔹 حقوق */
-.footer {
-    margin: 20px 0;
-    font-size: 1em;
-    color: #aaa;
+/* controls under player */
+.player-controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  gap:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
 }
-.footer a {
-    color: #00bfff;
-    text-decoration: none;
-    font-weight: bold;
+.controls-left{display:flex;gap:10px;align-items:center}
+.btn{
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  background:var(--accent);
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(255,204,51,0.08);
 }
-.footer a:hover { color: #1e90ff; }
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+.quality-list{display:flex;gap:8px;align-items:center}
+.quality-item{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.03);font-weight:700;color:#ddd;cursor:pointer}
+.quality-item.active{background:rgba(255,204,51,0.95);color:#111}
 
-/* موبايل */
-@media (max-width: 600px) {
-    #player { aspect-ratio: 16/9; }
-    .channel-icon { width: 50px; height: 50px; }
-    #quality-bar { flex-direction: column; top: 5px; right: 5px; }
+/* channels grid */
+.channel-strip{
+  margin-top:6px;
+  padding:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.02);
+}
+.channels-grid{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap:12px;
+}
+.channel-tile{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  padding:10px;
+  border-radius:12px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  cursor:pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+  border:1px solid rgba(255,255,255,0.02);
+}
+.channel-tile:hover{ transform: translateY(-6px) scale(1.01); box-shadow:0 14px 30px rgba(0,0,0,0.6)}
+.tile-left{
+  width:52px;height:52px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;border:1px solid rgba(255,255,255,0.03)
+}
+.tile-left img{width:100%;height:100%;object-fit:cover}
+.tile-info{ text-align:right; flex:1 }
+.tile-name{ font-weight:800; color:#fff; font-size:14px; margin-bottom:4px }
+.tile-sub{ font-size:12px; color:var(--muted) }
+
+/* active channel highlight */
+.channel-tile.active{
+  outline: 3px solid rgba(255,204,51,0.15);
+  box-shadow: 0 12px 30px rgba(255,204,51,0.06), 0 2px 6px rgba(0,0,0,0.6) inset;
+}
+
+/* responsive */
+@media (max-width:900px){
+  .channels-grid{ grid-template-columns: repeat(4,1fr) }
+  #player{ height:360px }
+}
+@media (max-width:600px){
+  header{ padding:10px }
+  .channels-grid{ grid-template-columns: repeat(2,1fr); gap:10px }
+  #player{ height:220px }
+  .player-overlay{ left:10px; top:8px }
+  .tile-left{ width:46px;height:46px }
 }
 </style>
 </head>
 <body>
 
-<!-- 🔹 شاشة الترحيب -->
-<div id="welcome-popup">
-  <h2>أهلاً بك 👋</h2>
-  <p>انضم لقناة التلي للحصول على آخر التحديثات</p>
-  <a href="tg://resolve?domain=alialiah123456" onclick="window.open('https://t.me/alialiah123456', '_blank')">انضم الآن</a>
-  <button onclick="closePopup()">متابعة للموقع</button>
-</div>
-
-<!-- 🔹 الهيدر -->
 <header>
-  <div class="logo">Live TV</div>
-  <div class="menu">☰</div>
+  <div class="logo">
+    <div class="dot">TV</div>
+    <div>
+      <h1 style="margin:0">Live TV</h1>
+    </div>
+  </div>
+  <div class="header-right">قناة التلي — <a href="https://t.me/alialiah123456" style="color:#9fdcff;text-decoration:none" target="_blank">انضم</a></div>
 </header>
 
-<!-- 🔹 المشغل -->
-<div id="player-container">
-    <div id="current-channel-name"></div>
-    <video id="player" controls autoplay></video>
-    <div id="quality-bar"></div>
-</div>
+<main class="main">
 
-<!-- 🔹 أزرار تنقل القنوات -->
-<div class="channel-nav">
-    <button onclick="prevChannel()">⏪</button>
-    <button onclick="nextChannel()">⏩</button>
-</div>
+  <section class="player-wrap">
+    <video id="player" controls playsinline preload="metadata"></video>
 
-<!-- 🔹 شبكة القنوات -->
-<div class="channels" id="channels-container"></div>
+    <div class="player-overlay">
+      <div class="channel-badge" id="channel-badge">قناة</div>
+      <div class="channel-title" id="channel-title">جاري التحميل...</div>
+    </div>
+
+    <div class="player-controls">
+      <div class="controls-left">
+        <button class="btn" onclick="prevChannel()">⏪ السابقة</button>
+        <button class="btn" onclick="nextChannel()">⏩ التالية</button>
+        <button class="btn ghost" id="openChat" onclick="window.open('https://t.me/alialiah123456','_blank')">قناة التلي</button>
+      </div>
+
+      <div class="quality-list" id="quality-list">
+      </div>
+    </div>
+  </section>
+
+  <section class="channel-strip">
+    <div class="channels-grid" id="channels-grid">
+    </div>
+  </section>
+
+</main>
 
 <script>
-const barcaLogo = "https://llaaddzz.neocities.org/%D8%AA%D9%86%D8%B2%D9%8A%D9%84.png";
-
-const channelColors = ['#ff4d4d','#ff944d','#ffdb4d','#85ff4d','#4dffff','#4d4dff','#b84dff','#ff4dd2','#ff6f4d','#ffd24d','#4dff88','#4defff'];
+const allLogo = "https://llaaddzz.neocities.org/1755383532388.jpg";
+const channelColors = [
+  ['#ff6b6b','#ffb86b'],
+  ['#ff884d','#ffd27a'],
+  ['#ff4dbd','#ff8bd1'],
+  ['#ffd24d','#ffee99'],
+  ['#4dd6ff','#9ff3ff'],
+  ['#6b9bff','#b5dbff'],
+  ['#b84dff','#d5a0ff'],
+  ['#4dff88','#baf5d0'],
+  ['#ff4d4d','#ffb0b0'],
+  ['#ffa64d','#ffd3a6'],
+  ['#8be04a','#e7ffb7'],
+  ['#6fd6ff','#cfefff']
+];
 
 const channels = [
-  {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8']},
-  {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8']},
-  {name:'برشلونة مباشر', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
+  {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8']},
+  {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8']},
+  {name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
   {name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8']},
   {name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8']},
   {name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8']},
@@ -248,74 +250,83 @@ const channels = [
   {name:'Live TV 12', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']}
 ];
 
-const container = document.getElementById('channels-container');
-const qualityBar = document.getElementById('quality-bar');
-const video = document.getElementById('player');
-const channelNameDisplay = document.getElementById('current-channel-name');
+const grid = document.getElementById('channels-grid');
+const player = document.getElementById('player');
+const titleEl = document.getElementById('channel-title');
+const badgeEl = document.getElementById('channel-badge');
+const qualityList = document.getElementById('quality-list');
+
+let current = 0;
 
 channels.forEach((ch,i)=>{
-  const div = document.createElement('div');
-  div.className = 'channel-container';
+  const tile = document.createElement('div');
+  tile.className = 'channel-tile';
+  tile.dataset.index = i;
 
-  const logo = (ch.name === 'برشلونة مباشر') ? barcaLogo : '';
+  const gradient = channelColors[i % channelColors.length];
+  const left = document.createElement('div');
+  left.className = 'tile-left';
+  left.style.background = `linear-gradient(180deg, ${gradient[0]}55, ${gradient[1]}55)`;
 
-  div.innerHTML = `
-    <div class="channel-icon" style="background:${channelColors[i%channelColors.length]}" onclick="playChannel(${i})" title="${ch.name}">
-      ${logo ? `<img src="${logo}" alt="${ch.name}">` : ''}
-    </div>
-    <div class="channel-name">${ch.name}</div>
-  `;
-  container.appendChild(div);
+  const img = document.createElement('img'); 
+  img.src = allLogo; img.alt = ch.name;
+  left.appendChild(img);
+
+  const info = document.createElement('div'); info.className = 'tile-info';
+  const name = document.createElement('div'); name.className='tile-name'; name.textContent = ch.name;
+  const sub = document.createElement('div'); sub.className='tile-sub'; sub.textContent = `جودة: ${ch.urls.length} اختيار`;
+  info.appendChild(name); info.appendChild(sub);
+
+  tile.appendChild(left); tile.appendChild(info);
+  tile.onclick = ()=>{ playChannel(i); };
+  grid.appendChild(tile);
 });
 
-let currentChannel = 0;
+function highlightActive(){
+  document.querySelectorAll('.channel-tile').forEach(t=>t.classList.remove('active'));
+  const active = document.querySelector(`.channel-tile[data-index="${current}"]`);
+  if(active) active.classList.add('active');
+}
 
-function updateQualityButtons(channelIndex){
-  qualityBar.innerHTML = '';
-  channels[channelIndex].urls.forEach((url,j)=>{
-    const labels = ['1080p','720p','360p'];
-    const btn = document.createElement('button');
-    btn.textContent = labels[j] || 'جودة';
-    btn.className = 'quality-btn';
-    if(j===0) btn.classList.add('active');
-    btn.onclick = () => {
-      video.src = url;
-      video.play();
-      document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-    qualityBar.appendChild(btn);
+function renderQuality(index){
+  qualityList.innerHTML = '';
+  const urls = channels[index].urls || [];
+  const labels = ['1080p','720p','360p','SD'];
+  urls.forEach((u,j)=>{
+    const el = document.createElement('div');
+    el.className='quality-item';
+    el.textContent = labels[j] || `Q${j+1}`;
+    if(j===0) el.classList.add('active');
+    el.onclick = ()=>{ player.src = u; player.play(); document.querySelectorAll('.quality-item').forEach(x=>x.classList.remove('active')); el.classList.add('active'); }
+    qualityList.appendChild(el);
   });
 }
 
 function playChannel(index){
-  currentChannel = index;
-  video.src = channels[index].urls[0];
-  video.play();
-  updateQualityButtons(index);
-  channelNameDisplay.textContent = channels[index].name;
+  current = index;
+  const ch = channels[index];
+  const src = (ch.urls && ch.urls.length) ? ch.urls[0] : '';
+  player.src = src;
+  player.play().catch(()=>{});
+  titleEl.textContent = ch.name;
+  badgeEl.textContent = ch.name.split(' ')[0];
+  renderQuality(index);
+  highlightActive();
+  const tile = document.querySelector(`.channel-tile[data-index="${index}"]`);
+  if(tile) tile.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
 }
 
-function prevChannel(){
-  currentChannel = (currentChannel-1+channels.length)%channels.length;
-  playChannel(currentChannel);
-}
-function nextChannel(){
-  currentChannel = (currentChannel+1)%channels.length;
-  playChannel(currentChannel);
-}
+function prevChannel(){ playChannel((current - 1 + channels.length) % channels.length); }
+function nextChannel(){ playChannel((current + 1) % channels.length); }
 
-function closePopup(){
-  document.getElementById('welcome-popup').style.display='none';
-}
+window.addEventListener('keydown',(e)=>{
+  if(e.key === 'ArrowLeft') prevChannel();
+  if(e.key === 'ArrowRight') nextChannel();
+  if(e.key === ' ') { e.preventDefault(); if(player.paused) player.play(); else player.pause(); }
+});
 
 window.addEventListener('load',()=>{ playChannel(0); });
 </script>
-
-<!-- 🔹 حقوق -->
-<div class="footer">
-  جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
-</div>
 
 </body>
 </html>
