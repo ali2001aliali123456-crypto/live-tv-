@@ -135,6 +135,46 @@ header .menu {
 }
 .channel-name { font-weight: bold; }
 
+/* 🔹 نافذة الترحيب */
+#welcome-popup {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.9);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+#welcome-popup h2 {
+    color:#ff9800;
+    margin-bottom:20px;
+}
+#welcome-popup a {
+    display:inline-block;
+    background:#ff0066;
+    color:#fff;
+    padding:10px 20px;
+    border-radius:8px;
+    font-weight:bold;
+    text-decoration:none;
+    transition:0.3s;
+}
+#welcome-popup a:hover { background:#ff3385; }
+#welcome-popup button {
+    margin-top:15px;
+    padding:8px 15px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#ff9800;
+    color:#111;
+}
+
 /* 🔹 حقوق */
 .footer {
     margin: 20px 0;
@@ -157,6 +197,14 @@ header .menu {
 </style>
 </head>
 <body>
+
+<!-- 🔹 شاشة الترحيب -->
+<div id="welcome-popup">
+  <h2>أهلاً بك 👋</h2>
+  <p>انضم لقناة التلي للحصول على آخر التحديثات</p>
+  <a href="https://t.me/alialiah123456" target="_blank">انضم الآن</a>
+  <button onclick="closePopup()">متابعة للموقع</button>
+</div>
 
 <!-- 🔹 الهيدر -->
 <header>
@@ -209,7 +257,6 @@ channels.forEach((ch,i)=>{
   const div = document.createElement('div');
   div.className = 'channel-container';
 
-  // شعار خاص لقناة برشلونة، باقي القنوات بدون شعار
   const logo = (ch.name === 'برشلونة مباشر') ? barcaLogo : '';
 
   div.innerHTML = `
@@ -256,6 +303,10 @@ function prevChannel(){
 function nextChannel(){
   currentChannel = (currentChannel+1)%channels.length;
   playChannel(currentChannel);
+}
+
+function closePopup(){
+  document.getElementById('welcome-popup').style.display='none';
 }
 
 window.addEventListener('load',()=>{ playChannel(0); });
