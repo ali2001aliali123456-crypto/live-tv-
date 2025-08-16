@@ -280,4 +280,179 @@ scJsHost+
 </noscript>
 
 </body>
+</html>    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.3s;
+}
+.channel-container:hover { transform: translateY(-3px); }
+.channel-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(255,255,255,0.2);
+    transition: 0.3s;
+}
+.channel-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.channel-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 25px rgba(255,152,0,0.4);
+}
+.channel-name { font-weight: bold; }
+
+/* 🔹 حقوق */
+.footer {
+    margin: 20px 0;
+    font-size: 1em;
+    color: #aaa;
+}
+.footer a {
+    color: #00bfff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.footer a:hover { color: #1e90ff; }
+
+/* موبايل */
+@media (max-width: 600px) {
+    #player { aspect-ratio: 16/9; }
+    .channel-icon { width: 50px; height: 50px; }
+    #quality-bar { flex-direction: column; top: 5px; right: 5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 🔹 الهيدر -->
+<header>
+  <div class="logo">Live TV</div>
+  <div class="menu">☰</div>
+</header>
+
+<!-- 🔹 المشغل -->
+<div id="player-container">
+    <div id="current-channel-name"></div>
+    <video id="player" controls autoplay></video>
+    <div id="quality-bar"></div>
+</div>
+
+<!-- 🔹 أزرار تنقل القنوات -->
+<div class="channel-nav">
+    <button onclick="prevChannel()">⏪</button>
+    <button onclick="nextChannel()">⏩</button>
+</div>
+
+<!-- 🔹 شبكة القنوات -->
+<div class="channels" id="channels-container"></div>
+
+<script>
+const logoUrl = "https://llaaddzz.neocities.org/Bein_sport_logo.png";
+const channelColors = ['#ff4d4d','#ff944d','#ffdb4d','#85ff4d','#4dffff','#4d4dff','#b84dff','#ff4dd2','#ff6f4d','#ffd24d','#4dff88','#4defff'];
+
+const channels = [
+  {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8']},
+  {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2_720.m3u8']},
+  {name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_720.m3u8']},
+  {name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8']},
+  {name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8']},
+  {name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8']},
+  {name:'Live TV 7', urls:['https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8']},
+  {name:'Live TV 8', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8']},
+  {name:'Live TV 9', urls:['https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8']},
+  {name:'Live TV 10', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8']},
+  {name:'Live TV 11', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
+  {name:'Live TV 12', urls:['http://125x.org:8080/bn1hd/tracks-v1a1/mono.m3u8']}
+];
+
+const container = document.getElementById('channels-container');
+const qualityBar = document.getElementById('quality-bar');
+const video = document.getElementById('player');
+const channelNameDisplay = document.getElementById('current-channel-name');
+
+channels.forEach((ch,i)=>{
+  const div = document.createElement('div');
+  div.className = 'channel-container';
+  div.innerHTML = `
+    <div class="channel-icon" style="background:${channelColors[i%channelColors.length]}" onclick="playChannel(${i})" title="${ch.name}">
+      <img src="${logoUrl}" alt="${ch.name}">
+    </div>
+    <div class="channel-name">${ch.name}</div>
+  `;
+  container.appendChild(div);
+});
+
+let currentChannel = 0;
+
+function updateQualityButtons(channelIndex){
+  qualityBar.innerHTML = '';
+  channels[channelIndex].urls.forEach((url,j)=>{
+    const labels = ['1080p','720p','360p'];
+    const btn = document.createElement('button');
+    btn.textContent = labels[j] || 'جودة';
+    btn.className = 'quality-btn';
+    if(j===0) btn.classList.add('active');
+    btn.onclick = () => {
+      video.src = url;
+      video.play();
+      document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    qualityBar.appendChild(btn);
+  });
+}
+
+function playChannel(index){
+  currentChannel = index;
+  video.src = channels[index].urls[0];
+  video.play();
+  updateQualityButtons(index);
+  channelNameDisplay.textContent = channels[index].name;
+}
+
+function prevChannel(){
+  currentChannel = (currentChannel-1+channels.length)%channels.length;
+  playChannel(currentChannel);
+}
+function nextChannel(){
+  currentChannel = (currentChannel+1)%channels.length;
+  playChannel(currentChannel);
+}
+
+window.addEventListener('load',()=>{ playChannel(0); });
+</script>
+
+<!-- 🔹 حقوق -->
+<div class="footer">
+  جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
+</div>
+
+<!-- 🔹 Statcounter (مخفي) -->
+<script type="text/javascript">
+var sc_project=13157668; 
+var sc_invisible=1;   // ✅ مخفي
+var sc_security="e22a1f62"; 
+var scJsHost = "https://";
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript>
+  <div class="statcounter" style="display:none;">
+    <img class="statcounter"
+    src="https://c.statcounter.com/13157668/0/e22a1f62/1/"
+    alt="Web Analytics">
+  </div>
+</noscript>
+
+</body>
 </html>
