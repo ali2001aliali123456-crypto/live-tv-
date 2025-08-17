@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <title>📺 Live TV + 📻 صوتيات</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 body { background:#111; color:#fff; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; text-align:center; transition:0.3s; overflow-x:hidden; }
 header { background:#000; padding:15px; display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #ff0066; transition:0.3s; }
@@ -92,8 +93,10 @@ function showSection(section){
   }
 }
 
-// القنوات
+// الشعارات
 const logos = { "default":"https://llaaddzz.neocities.org/1755383532388.jpg", "radio":"https://llaaddzz.neocities.org/1755383532388.jpg"};
+
+// القنوات
 const channels=[
 {name:'Live TV 1',urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8']},
 {name:'Live TV 2',urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8']},
@@ -130,8 +133,7 @@ function updateQualityButtons(channelIndex){
     btn.className='quality-btn';
     if(j===0) btn.classList.add('active');
     btn.onclick=()=>{
-      video.src=url;
-      video.play();
+      playStream(url);
       document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
     };
@@ -139,10 +141,20 @@ function updateQualityButtons(channelIndex){
   });
 }
 
+function playStream(url){
+  if(Hls.isSupported()){
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  } else {
+    video.src=url;
+  }
+  video.play();
+}
+
 function playChannel(index){
   currentChannel=index;
-  video.src=channels[index].urls[0];
-  video.play();
+  playStream(channels[index].urls[0]);
   updateQualityButtons(index);
   channelNameDisplay.textContent=channels[index].name;
 }
@@ -195,176 +207,6 @@ function updateRadioQualityButtons(index,currentQuality){
 // عند تحميل الصفحة
 window.addEventListener('load',()=>{ 
   showSection('both'); 
-  playChannel(0); 
-  playRadio(0,'strong'); 
-});
-</script>
-
-<div class="footer">
-جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
-</div>
-
-</body>
-</html>{name:'Live TV 6',urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 7',urls:['https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 8',urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 9',urls:['https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 10',urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 11',urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 12',urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']}
-];
-
-const container=document.getElementById('channels-container');
-const qualityBar=document.getElementById('quality-bar');
-const video=document.getElementById('player');
-const channelNameDisplay=document.getElementById('current-channel-name');
-
-channels.forEach((ch,i)=>{
-  const div=document.createElement('div');
-  div.className='channel-container';
-  div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logos.default}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;
-  container.appendChild(div);
-});
-
-let currentChannel=0;
-function updateQualityButtons(channelIndex){
-  qualityBar.innerHTML='';
-  channels[channelIndex].urls.forEach((url,j)=>{
-    const btn=document.createElement('button');
-    btn.textContent='مصدر '+(j+1);
-    btn.className='quality-btn';
-    if(j===0) btn.classList.add('active');
-    btn.onclick=()=>{
-      video.src=url;
-      video.play();
-      document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    };
-    qualityBar.appendChild(btn);
-  });
-}
-
-function playChannel(index){
-  currentChannel=index;
-  video.src=channels[index].urls[0];
-  video.play();
-  updateQualityButtons(index);
-  channelNameDisplay.textContent=channels[index].name;
-}
-
-// ====== الراديو ======
-const radios=[
-  {name:'live 1', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm/1M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm/1L'},
-  {name:'live 2', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2L'},
-  {name:'live 3', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3L'},
-  {name:'live 4', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4L'},
-  {name:'live 5', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5L'}
-];
-
-const radioContainer=document.getElementById('radios-container');
-const radioPlayer=document.getElementById('radio-player');
-const radioNameDisplay=document.getElementById('current-radio-name');
-const radioQualityBar=document.getElementById('radio-quality-bar');
-
-radios.forEach((r,i)=>{
-  const div=document.createElement('div');
-  div.className='radio-container';
-  div.innerHTML=`
-    <div class="radio-icon" onclick="playRadio(${i},'strong')" title="${r.name}">
-      <img src="${logos.radio}" alt="${r.name}">
-    </div>
-    <div class="radio-name">${r.name}</div>
-  `;
-  radioContainer.appendChild(div);
-});
-
-function playRadio(index, quality){
-  radioPlayer.src=radios[index][quality];
-  radioPlayer.play();
-  radioNameDisplay.textContent=radios[index].name + ' - ' + (quality==='strong'?'نت قوي':'نت ضعيف');
-  updateRadioQualityButtons(index,quality);
-}
-
-function updateRadioQualityButtons(index,currentQuality){
-  radioQualityBar.innerHTML='';
-  ['strong','weak'].forEach(q=>{
-    const btn=document.createElement('button');
-    btn.textContent = q==='strong'?'نت قوي':'نت ضعيف';
-    btn.className='quality-btn';
-    if(q===currentQuality) btn.classList.add('active');
-    btn.onclick=()=>{ playRadio(index,q); };
-    radioQualityBar.appendChild(btn);
-  });
-}
-
-// عند تحميل الصفحة، تشغيل Live TV 1 مصدر 1
-window.addEventListener('load',()=>{ 
-  showSection('both'); 
-  playChannel(0); 
-  playRadio(0,'strong'); 
-});
-</script>
-
-<div class="footer">
-جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
-</div>
-
-</body>
-</html>
-function playChannel(index){
-  currentChannel=index;
-  video.src=channels[index].urls[0];
-  video.play();
-  updateQualityButtons(index);
-  channelNameDisplay.textContent=channels[index].name;
-}
-
-// ====== الراديو ======
-const radios=[
-  {name:'live 1', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm/1M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm/1L'},
-  {name:'live 2', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2L'},
-  {name:'live 3', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3L'},
-  {name:'live 4', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4L'},
-  {name:'live5 ', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5L'}
-];
-
-const radioContainer=document.getElementById('radios-container');
-const radioPlayer=document.getElementById('radio-player');
-const radioNameDisplay=document.getElementById('current-radio-name');
-const radioQualityBar=document.getElementById('radio-quality-bar');
-
-radios.forEach((r,i)=>{
-  const div=document.createElement('div');
-  div.className='radio-container';
-  div.innerHTML=`
-    <div class="radio-icon" onclick="playRadio(${i},'strong')" title="${r.name}">
-      <img src="${logos.radio}" alt="${r.name}">
-    </div>
-    <div class="radio-name">${r.name}</div>
-  `;
-  radioContainer.appendChild(div);
-});
-
-function playRadio(index, quality){
-  radioPlayer.src=radios[index][quality];
-  radioPlayer.play();
-  radioNameDisplay.textContent=radios[index].name + ' - ' + (quality==='strong'?'نت قوي':'نت ضعيف');
-  updateRadioQualityButtons(index,quality);
-}
-
-function updateRadioQualityButtons(index,currentQuality){
-  radioQualityBar.innerHTML='';
-  ['strong','weak'].forEach(q=>{
-    const btn=document.createElement('button');
-    btn.textContent = q==='strong'?'نت قوي':'نت ضعيف';
-    btn.className='quality-btn';
-    if(q===currentQuality) btn.classList.add('active');
-    btn.onclick=()=>{ playRadio(index,q); };
-    radioQualityBar.appendChild(btn);
-  });
-}
-
-window.addEventListener('load',()=>{ 
   playChannel(0); 
   playRadio(0,'strong'); 
 });
