@@ -44,7 +44,6 @@ nav button:hover{ background:#ffc107; }
 .footer a{ color:#00bfff; text-decoration:none; font-weight:bold; }
 .footer a:hover{ color:#1e90ff; }
 
-/* الوضع الليلي والفاتح */
 body.light { background:#f5f5f5; color:#111; }
 body.light #player-container, body.light #radio-container { background:linear-gradient(145deg,#fff,#ddd); border-color:#ff9800; }
 body.light .channel-container, body.light .radio-container{ background:#eee; border-color:#ccc; }
@@ -58,7 +57,6 @@ body.light nav button{ background:#ff9800; color:#111; }
   <div class="menu">☰</div>
 </header>
 
-<!-- القائمة الرئيسية -->
 <nav>
   <button onclick="showSection('channels')">القنوات</button>
   <button onclick="showSection('radios')">الصوتيات بالاسفل ⬇️</button>
@@ -67,7 +65,6 @@ body.light nav button{ background:#ff9800; color:#111; }
   <a href="https://t.me/alilivetv12" target="_blank"><button>معلومات/تواصل</button></a>
 </nav>
 
-<!-- قسم القنوات -->
 <div class="section-title">📺 البث التلفزيوني</div>
 <div id="player-container">
   <div id="current-channel-name"></div>
@@ -76,11 +73,10 @@ body.light nav button{ background:#ff9800; color:#111; }
 </div>
 <div class="channels" id="channels-container"></div>
 
-<!-- قسم الراديو -->
 <div class="section-title">🎧 الصوتيات</div>
 <div id="radio-container">
   <div id="current-radio-name"></div>
-  <audio id="radio-player" controls></audio> <!-- التشغيل فقط عند الضغط -->
+  <audio id="radio-player" controls></audio>
   <div id="radio-quality-bar" class="sources"></div>
 </div>
 <div class="radios" id="radios-container"></div>
@@ -90,24 +86,37 @@ body.light nav button{ background:#ff9800; color:#111; }
 </div>
 
 <script>
-const logos = { "default":"https://llaaddzz.neocities.org/1755383532388.jpg", "radio":"https://llaaddzz.neocities.org/1755383532388.jpg" };
+const logos = { 
+  "default":"https://llaaddzz.neocities.org/1755383532388.jpg", 
+  "radio":"https://llaaddzz.neocities.org/1755383532388.jpg",
+  "Live TV 1":"https://llaaddzz.neocities.org/%D8%AA%D9%86%D8%B2%D9%8A%D9%84%20(1).png",
+  "Live TV 2":"https://llaaddzz.neocities.org/unnamed.png",
+  "Live TV 3":"https://llaaddzz.neocities.org/unnamed.png",
+  "Live TV 4":"https://llaaddzz.neocities.org/images.webp",
+  "Live TV 5":"https://llaaddzz.neocities.org/unnamed.png",
+  "Live TV 6":"https://llaaddzz.neocities.org/unnamed.png",
+  "Live TV 7":"https://llaaddzz.neocities.org/CBC_Sport_Logo.png",
+  "Live TV 8":"https://llaaddzz.neocities.org/%D8%AA%D9%86%D8%B2%D9%8A%D9%84%20(2).png",
+  "Live TV 9":"https://llaaddzz.neocities.org/1755383532388.jpg",
+  "Live TV 10":"https://llaaddzz.neocities.org/1755383532388.jpg",
+  "Live TV 11":"https://llaaddzz.neocities.org/1755383532388.jpg",
+  "Live TV 12":"https://llaaddzz.neocities.org/1755383532388.jpg"
+};
 
-// ======== قنوات الفيديو ========
 const channels=[
 {name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8']},
 {name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8']},
 {name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 4', urls:['https://cdn404.canlitvme.com/idmantv.m3u8?tkn=SZWQMHMLzCwF6o0Fa579Wg&tms=1755484818&hst=tv.canlitvme.com&ip=169.224.32.67/supertv/sport/stv4/ch4/ch4_1080.m3u8']},
+{name:'Live TV 4', urls:['https://cdn404.canlitvme.com/idmantv.m3u8?tkn=SZWQMHMLzCwF6o0Fa579Wg&tms=1755484818&hst=tv.canlitvme.com&ip=169.224.32.67','']}, // المصدر الثاني فاضي تضيف انت الرابط
 {name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
 {name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 7', urls:['https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
+{name:'Live TV 7', urls:['https://cdn403.canlitvme.com/cbcsport.m3u8?tkn=yNtGoWTZrtwqRd2VlyDQHg&tms=1755485106&hst=tv.canlitvme.com&ip=169.224.32.67','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
 {name:'Live TV 8', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 9', urls:['https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
+{name:'Live TV 9', urls:['https://pepsi.abntv.live/hls/4spstream.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
 {name:'Live TV 10', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
 {name:'Live TV 11', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
 {name:'Live TV 12', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']}
 ];
-
 const container=document.getElementById('channels-container');
 const qualityBar=document.getElementById('quality-bar');
 const video=document.getElementById('player');
@@ -116,7 +125,8 @@ const channelNameDisplay=document.getElementById('current-channel-name');
 channels.forEach((ch,i)=>{
   const div=document.createElement('div');
   div.className='channel-container';
-  div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logos.default}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;
+  const logoSrc = logos[ch.name] || logos.default;
+  div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logoSrc}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;
   container.appendChild(div);
 });
 
@@ -171,7 +181,7 @@ radios.forEach((r,i)=>{
 
 function playRadio(index, quality){
   radioPlayer.src = radios[index][quality];
-  radioPlayer.play(); // التشغيل عند الضغط فقط
+  radioPlayer.play();
   radioNameDisplay.textContent = radios[index].name + ' - ' + (quality==='strong' ? 'نت قوي' : 'نت ضعيف');
   updateRadioQualityButtons(index, quality);
   document.getElementById('radio-container').style.display = 'block';
@@ -190,7 +200,6 @@ function updateRadioQualityButtons(index,currentQuality){
   });
 }
 
-// ===== وظائف الأقسام والوضع الليلي =====
 function showSection(section){
   if(section==='channels'){ document.getElementById('player-container').style.display='block'; document.getElementById('radio-container').style.display='none'; }
   else{ document.getElementById('radio-container').style.display='block'; document.getElementById('player-container').style.display='none'; }
@@ -198,27 +207,7 @@ function showSection(section){
 
 function toggleTheme(){ document.body.classList.toggle('light'); }
 
-window.addEventListener('load',()=>{ playChannel(0); /* لا تشغيل تلقائي للراديو */ });
+window.addEventListener('load',()=>{ playChannel(0); });
 </script>
-
-<!-- ===== Statcounter Tracking Code ===== -->
-<script type="text/javascript">
-var sc_project=13157668; 
-var sc_invisible=0; 
-var sc_security="e22a1f62"; 
-var scJsHost = "https://";
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript>
-<div class="statcounter">
-  <a title="Web Analytics Made Easy - Statcounter" href="https://statcounter.com/" target="_blank">
-    <img class="statcounter" src="https://c.statcounter.com/13157668/0/e22a1f62/0/" alt="Web Analytics Made Easy - Statcounter" referrerPolicy="no-referrer-when-downgrade">
-  </a>
-</div>
-</noscript>
-<!-- ===== End of Statcounter Code ===== -->
-
 </body>
 </html>
