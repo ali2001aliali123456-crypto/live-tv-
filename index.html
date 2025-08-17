@@ -9,12 +9,17 @@ body{margin:0;font-family:"Segoe UI", Tahoma, Verdana,sans-serif;background:#111
 #telegram-bar{position:fixed;top:0;left:0;width:100%;background:#000;color:#ffcc00;font-size:16px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2000;display:flex;justify-content:center;align-items:center;gap:15px;}
 #telegram-bar a{color:#ff0066;text-decoration:none;font-weight:700;}
 header{margin-top:90px;font-size:18px;color:#ffcc00;font-weight:700;}
+#player-container{width:90%;max-width:900px;margin:10px auto;position:relative;}
+#player{width:100%;aspect-ratio:16/9;border-radius:12px;border:2px solid #ffcc00;background:black;}
 .channel-bar{display:flex;justify-content:center;gap:12px;margin:12px 0;flex-wrap:wrap;}
 .channel-tile{width:110px;height:110px;background:#222;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border:1px solid rgba(255,255,255,0.05);padding-top:5px;}
 .channel-tile img{width:100px;height:100px;object-fit:contain;border-radius:8px;}
 .channel-label{width:100%;text-align:center;color:#ffcc00;font-size:13px;font-weight:700;margin-bottom:4px;}
 .channel-tile:hover{transform:scale(1.12);box-shadow:0 10px 25px rgba(255,204,51,0.2);}
 .channel-tile.active{outline:3px solid rgba(255,204,51,0.12);box-shadow:0 12px 30px rgba(255,204,51,0.25);transform:scale(1.12);}
+#quality-list{display:flex;justify-content:center;gap:10px;margin:8px 0;flex-wrap:wrap;}
+.quality-item{padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);font-weight:700;color:#ddd;cursor:pointer;border:1px solid rgba(255,255,255,0.03);}
+.quality-item.active{background:#ffcc00;color:#111;}
 @media(max-width:800px){.channel-tile{width:90px;height:90px}.channel-tile img{width:80px;height:80px}}
 @media(max-width:500px){.channel-tile{width:70px;height:70px}.channel-tile img{width:65px;height:65px}}
 </style>
@@ -29,56 +34,104 @@ header{margin-top:90px;font-size:18px;color:#ffcc00;font-weight:700;}
 <header>Live TV</header>
 
 <div class="channel-bar" id="top-channels"></div>
+<div id="player-container">
+  <video id="player" controls playsinline muted></video>
+  <div id="quality-list"></div>
+</div>
 <div class="channel-bar" id="bottom-channels"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
+const logoLive12="https://llaaddzz.neocities.org/large.jpg";
+const logoLive3="https://llaaddzz.neocities.org/large%20(1).jpg";
+const logoDefault="https://llaaddzz.neocities.org/1755383532388.jpg";
+
 const channels=[
-  {name:'Bein Sport 1', url:'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114053.ts'},
-  {name:'Bein Sport 2', url:'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114052.ts'},
-  {name:'Bein Sport 3', url:'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114050.ts'},
-  {name:'Live TV 1', url:'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8'},
-  {name:'Live TV 2', url:'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8'},
-  {name:'Live TV 3', url:'https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8'},
-  {name:'Live TV 4', url:'https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8'},
-  {name:'Live TV 5', url:'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8'},
-  {name:'Live TV 6', url:'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8'},
-  {name:'Live TV 7', url:'https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8'},
-  {name:'Live TV 8', url:'https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8'},
-  {name:'Live TV 9', url:'https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8'},
-  {name:'Live TV 10', url:'https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8'},
-  {name:'Live TV 11', url:'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8'},
-  {name:'Live TV 12', url:'https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8'}
+{name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8']},
+{name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2_720.m3u8']},
+{name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
+{name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8','https://stream.supertv.gg:3004/supertv/sport/stv4/ch4_720.m3u8']},
+{name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8','https://stream.supertv.gg:3005/supertv/sport/stv5/ch5_720.m3u8']},
+{name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://stream.supertv.gg:3006/supertv/sport/stv6/ch6_720.m3u8']},
+{name:'Live TV 7', urls:['https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8','https://stream.veo.buzz:6075/sport/ch3/ch3_720.m3u8']},
+{name:'Live TV 8', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6076/sport/ch4/ch4_720.m3u8']},
+{name:'Live TV 9', urls:['https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8','https://stream.veo.buzz:6077/sport/ch5/ch5_720.m3u8']},
+{name:'Live TV 10', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://stream.veo.buzz:6078/sport/ch6/ch6_720.m3u8']},
+{name:'Live TV 11', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8']},
+{name:'Live TV 12', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index_low.m3u8']}
 ];
 
 const topBar=document.getElementById('top-channels');
 const bottomBar=document.getElementById('bottom-channels');
+const player=document.getElementById('player');
+const qualityList=document.getElementById('quality-list');
+let currentIndex=-1;
+let hls=null;
 
 function createTile(ch,i){
-  const tile=document.createElement('div');
-  tile.className='channel-tile';
-  tile.dataset.index=i;
-  const label=document.createElement('div'); label.className='channel-label'; label.textContent=ch.name;
-  const img=document.createElement('img'); img.src='https://llaaddzz.neocities.org/1755383532388.jpg'; img.alt=ch.name;
-  tile.appendChild(label); tile.appendChild(img);
-
-  // القنوات BEIN تفتح XPola مباشرة
-  if(i<3){
-    tile.addEventListener('click',()=>openInXPola(ch.url));
-  } else {
-    tile.addEventListener('click',()=>window.open(ch.url,'_blank'));
-  }
-  return tile;
+const tile=document.createElement('div');
+tile.className='channel-tile';
+tile.dataset.index=i;
+let logo=logoDefault;
+if(ch.name==='Live TV 1'||ch.name==='Live TV 2') logo=logoLive12;
+if(ch.name==='Live TV 3') logo=logoLive3;
+const label=document.createElement('div'); label.className='channel-label'; label.textContent=ch.name;
+const img=document.createElement('img'); img.src=logo; img.alt=ch.name;
+tile.appendChild(label); tile.appendChild(img);
+tile.addEventListener('click',()=>openChannel(i));
+return tile;
 }
 
 channels.forEach((ch,i)=>{
-  const tile=createTile(ch,i);
-  if(i<8) topBar.appendChild(tile); else bottomBar.appendChild(tile);
+const tile=createTile(ch,i);
+if(i<6) topBar.appendChild(tile); else bottomBar.appendChild(tile);
 });
 
-function openInXPola(fileUrl){
-  const intentUrl = `intent://${fileUrl.replace(/^https?:\/\//,'')}#Intent;scheme=https;type=video/*;package=com.xpola.player;end`;
-  window.location.href = intentUrl;
+function setActiveChannel(index){
+document.querySelectorAll('.channel-tile').forEach(el=>el.classList.remove('active'));
+const el=document.querySelector(`.channel-tile[data-index="${index}"]`);
+if(el) el.classList.add('active');
+currentIndex=index;
 }
+
+function openChannel(i){
+const ch=channels[i];
+setActiveChannel(i);
+renderQuality(ch);
+}
+
+function renderQuality(ch){
+qualityList.innerHTML='';
+if(!ch.urls||ch.urls.length===0){ alert("⚠️ اختر المصدر حتى تفتح القناة"); return; }
+ch.urls.forEach((u,j)=>{
+const q=document.createElement('div'); q.className='quality-item';
+q.textContent="اضغط للمشاهدة مصدر "+(j+1);
+q.addEventListener('click',()=>{
+document.querySelectorAll('.quality-item').forEach(x=>x.classList.remove('active'));
+q.classList.add('active');
+
+if(hls){ try{ hls.destroy(); }catch(e){} hls=null; }
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(u);
+hls.attachMedia(player);
+player.play().catch(()=>{});
+}else if(player.canPlayType('application/vnd.apple.mpegurl')){
+player.src=u; player.play().catch(()=>{});
+}else{ alert("⚠️ المتصفح لا يدعم تشغيل هذا النوع من البث."); }
+});
+qualityList.appendChild(q);
+});
+}
+
+window.addEventListener('keydown',(e)=>{
+if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+if(currentIndex===-1) currentIndex=0;
+currentIndex=(e.key==='ArrowLeft')?(currentIndex-1+channels.length)%channels.length:(currentIndex+1)%channels.length;
+openChannel(currentIndex);
+}
+});
 </script>
 
 </body>
