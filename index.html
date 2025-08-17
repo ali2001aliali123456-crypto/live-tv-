@@ -80,7 +80,7 @@ body.light nav button{ background:#ff9800; color:#111; }
 <div class="section-title">🎧 الصوتيات</div>
 <div id="radio-container">
   <div id="current-radio-name"></div>
-  <audio id="radio-player" controls autoplay></audio>
+  <audio id="radio-player" controls></audio> <!-- التشغيل فقط عند الضغط -->
   <div id="radio-quality-bar" class="sources"></div>
 </div>
 <div class="radios" id="radios-container"></div>
@@ -170,12 +170,12 @@ radios.forEach((r,i)=>{
 });
 
 function playRadio(index, quality){
-  radioPlayer.src=radios[index][quality];
-  radioPlayer.play();
-  radioNameDisplay.textContent=radios[index].name + ' - ' + (quality==='strong'?'نت قوي':'نت ضعيف');
-  updateRadioQualityButtons(index,quality);
-  document.getElementById('radio-container').style.display='block';
-  document.getElementById('player-container').style.display='none';
+  radioPlayer.src = radios[index][quality];
+  radioPlayer.play(); // التشغيل عند الضغط فقط
+  radioNameDisplay.textContent = radios[index].name + ' - ' + (quality==='strong' ? 'نت قوي' : 'نت ضعيف');
+  updateRadioQualityButtons(index, quality);
+  document.getElementById('radio-container').style.display = 'block';
+  document.getElementById('player-container').style.display = 'none';
 }
 
 function updateRadioQualityButtons(index,currentQuality){
@@ -198,8 +198,27 @@ function showSection(section){
 
 function toggleTheme(){ document.body.classList.toggle('light'); }
 
-window.addEventListener('load',()=>{ playChannel(0); playRadio(0,'strong'); });
+window.addEventListener('load',()=>{ playChannel(0); /* لا تشغيل تلقائي للراديو */ });
 </script>
+
+<!-- ===== Statcounter Tracking Code ===== -->
+<script type="text/javascript">
+var sc_project=13157668; 
+var sc_invisible=0; 
+var sc_security="e22a1f62"; 
+var scJsHost = "https://";
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript>
+<div class="statcounter">
+  <a title="Web Analytics Made Easy - Statcounter" href="https://statcounter.com/" target="_blank">
+    <img class="statcounter" src="https://c.statcounter.com/13157668/0/e22a1f62/0/" alt="Web Analytics Made Easy - Statcounter" referrerPolicy="no-referrer-when-downgrade">
+  </a>
+</div>
+</noscript>
+<!-- ===== End of Statcounter Code ===== -->
 
 </body>
 </html>
