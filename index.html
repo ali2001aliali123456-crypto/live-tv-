@@ -1,138 +1,220 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>📺 Live TV</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{margin:0;font-family:"Segoe UI", Tahoma, Verdana,sans-serif;background:#111;color:#fff;text-align:center;}
-#telegram-bar{position:fixed;top:0;left:0;width:100%;background:#000;color:#ffcc00;font-size:16px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.1);z-index:2000;display:flex;justify-content:center;align-items:center;gap:15px;}
-#telegram-bar a{color:#ff0066;text-decoration:none;font-weight:700;}
-header{margin-top:90px;font-size:18px;color:#ffcc00;font-weight:700;}
-#player-container{width:90%;max-width:900px;margin:10px auto;position:relative;}
-#player{width:100%;aspect-ratio:16/9;border-radius:12px;border:2px solid #ffcc00;background:black;}
-.channel-bar{display:flex;justify-content:center;gap:12px;margin:12px 0;flex-wrap:wrap;}
-.channel-tile{width:110px;height:110px;background:#222;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border:1px solid rgba(255,255,255,0.05);padding-top:5px;}
-.channel-tile img{width:100px;height:100px;object-fit:contain;border-radius:8px;}
-.channel-label{width:100%;text-align:center;color:#ffcc00;font-size:13px;font-weight:700;margin-bottom:4px;}
-.channel-tile:hover{transform:scale(1.12);box-shadow:0 10px 25px rgba(255,204,51,0.2);}
-.channel-tile.active{outline:3px solid rgba(255,204,51,0.12);box-shadow:0 12px 30px rgba(255,204,51,0.25);transform:scale(1.12);}
-#quality-list{display:flex;justify-content:center;gap:10px;margin:8px 0;flex-wrap:wrap;}
-.quality-item{padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);font-weight:700;color:#ddd;cursor:pointer;border:1px solid rgba(255,255,255,0.03);}
-.quality-item.active{background:#ffcc00;color:#111;}
-@media(max-width:800px){.channel-tile{width:90px;height:90px}.channel-tile img{width:80px;height:80px}}
-@media(max-width:500px){.channel-tile{width:70px;height:70px}.channel-tile img{width:65px;height:65px}}
+  :root{--bg:#111;--card:#222;--accent:#ffcc00;--muted:rgba(255,255,255,0.08);}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:#fff;text-align:center}
+  #telegram-bar{position:fixed;top:0;left:0;width:100%;background:#000;color:var(--accent);font-size:15px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);z-index:9999;display:flex;justify-content:center;align-items:center;gap:12px}
+  #telegram-bar a{color:#ff0066;text-decoration:none;font-weight:700}
+  header{margin-top:84px;font-size:20px;color:var(--accent);font-weight:800}
+  .channel-bar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:18px}
+  .channel-tile{width:120px;height:120px;background:var(--card);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.04);transition:transform .14s,box-shadow .14s}
+  .channel-tile:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,0.6)}
+  .channel-label{color:var(--accent);font-weight:800;font-size:13px;margin-top:8px;text-align:center}
+  .logo{width:72px;height:48px;object-fit:cover;border-radius:6px;background:#000;border:1px solid rgba(255,255,255,0.03)}
+  /* modal */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:10000}
+  .modal{width:92%;max-width:420px;background:#0f0f0f;border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.04)}
+  .modal h3{color:var(--accent);margin:4px 0 10px;font-size:16px}
+  .sources{display:flex;flex-direction:column;gap:8px}
+  .src-btn{background:var(--muted);padding:10px;border-radius:8px;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,0.03);color:#eee}
+  .src-btn:hover{background:var(--accent);color:#111}
+  .small{font-size:12px;color:#ccc;margin-top:8px}
+  .warn{background:#3a2a2a;color:#ffb3b3;padding:8px;border-radius:8px;margin-top:10px;font-size:13px}
+  .row{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .btn-alt{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#222;color:#fff;cursor:pointer}
+  @media(max-width:520px){ .channel-tile{width:98px;height:98px} .logo{width:64px;height:42px} }
 </style>
 </head>
 <body>
 
 <div id="telegram-bar">
-  <img src="https://llaaddzz.neocities.org/live%20tv%20.png" alt="قناة التلي" style="height:70px; object-fit:contain;">
-  <span>📢 تابعنا على التليجرام: <a href="https://t.me/alialiah123456" target="_blank">@alialiah123456</a></span>
+  <img src="https://llaaddzz.neocities.org/live%20tv%20.png" alt="logo" style="height:46px;object-fit:contain">
+  <span>📢 تابعنا على التليجرام: <a href="https://t.me/alialiah123456" target="_blank" rel="noopener">@alialiah123456</a></span>
 </div>
 
-<header>Live TV</header>
+<header>Live TV — اختار قناة ثم المصدر</header>
 
-<div class="channel-bar" id="top-channels"></div>
-<div id="player-container">
-  <video id="player" controls playsinline muted></video>
-  <div id="quality-list"></div>
+<div class="channel-bar" id="channels"></div>
+
+<!-- اختيار المصدر modal -->
+<div class="modal-back" id="modalBack" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle">مصادر القناة</h3>
+    <div class="sources" id="sourcesList"></div>
+    <div class="small">إذا لم يفتح التطبيق، استخدم زر "فتح بالمتصفح" أو تأكد أن الموقع يعمل على HTTPS وأن التطبيق مثبت.</div>
+    <div class="row">
+      <button class="btn-alt" id="openBrowserBtn">فتح بالمتصفح</button>
+      <button class="btn-alt" id="playStoreBtn">تثبيت / فتح XPola (متجر)</button>
+      <button class="btn-alt" id="closeModalBtn">إغلاق</button>
+    </div>
+    <div class="warn" id="localWarn" style="display:none">ملاحظة: يجب رفع هذه الصفحة على استضافة HTTPS لفتح ملفات TS عبر التطبيق مباشرة. التشغيل من ملف محلي قد لا يعمل.</div>
+  </div>
 </div>
-<div class="channel-bar" id="bottom-channels"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
-const logoLive12="https://llaaddzz.neocities.org/large.jpg";
-const logoLive3="https://llaaddzz.neocities.org/large%20(1).jpg";
-const logoDefault="https://llaaddzz.neocities.org/1755383532388.jpg";
+/* ---------------------------
+   قنواتك — مع المصادر المطلوبة
+   BEIN 1/2/3 أولاً (روابط TS حسب ما اعطيت)
+   باقي القنوات كما طلبت.
+   --------------------------- */
+const channels = [
+  { name: 'Bein Sport 1', sources: [
+      { label: '4K', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114053.ts' },
+      { label: 'FULL HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/3854.ts' },
+      { label: 'HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/1269943.ts' }
+  ]},
+  { name: 'Bein Sport 2', sources: [
+      { label: '4K', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114052.ts' },
+      { label: 'FULL HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/3853.ts' },
+      { label: 'HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/3853.ts' } // تكرار كمصدر احتياطي
+  ]},
+  { name: 'Bein Sport 3', sources: [
+      { label: '4K', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/114050.ts' },
+      { label: 'FULL HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/3851.ts' },
+      { label: 'HD', url: 'http://app-plus.live/live/0iq4jp0j2bb/ne5zp7911c/3851.ts' } // تكرار كمصدر احتياطي
+  ]},
 
-const channels=[
-{name:'Live TV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8','https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8']},
-{name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2_720.m3u8']},
-{name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 4', urls:['https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8','https://stream.supertv.gg:3004/supertv/sport/stv4/ch4_720.m3u8']},
-{name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8','https://stream.supertv.gg:3005/supertv/sport/stv5/ch5_720.m3u8']},
-{name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://stream.supertv.gg:3006/supertv/sport/stv6/ch6_720.m3u8']},
-{name:'Live TV 7', urls:['https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8','https://stream.veo.buzz:6075/sport/ch3/ch3_720.m3u8']},
-{name:'Live TV 8', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6076/sport/ch4/ch4_720.m3u8']},
-{name:'Live TV 9', urls:['https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8','https://stream.veo.buzz:6077/sport/ch5/ch5_720.m3u8']},
-{name:'Live TV 10', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://stream.veo.buzz:6078/sport/ch6/ch6_720.m3u8']},
-{name:'Live TV 11', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8']},
-{name:'Live TV 12', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index_low.m3u8']}
+  // القنوات الأصلية كما عندك (M3U8)
+  { name: 'Live TV 1', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8' }] },
+  { name: 'Live TV 2', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8' }] },
+  { name: 'Live TV 3', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8' }] },
+  { name: 'Live TV 4', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_1080.m3u8' }] },
+  { name: 'Live TV 5', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8' }] },
+  { name: 'Live TV 6', sources: [{ label: 'Default', url: 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8' }] },
+  { name: 'Live TV 7', sources: [{ label: 'Default', url: 'https://stream.veo.buzz:6075/sport/ch3/adaptive.m3u8' }] },
+  { name: 'Live TV 8', sources: [{ label: 'Default', url: 'https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8' }] },
+  { name: 'Live TV 9', sources: [{ label: 'Default', url: 'https://stream.veo.buzz:6077/sport/ch5/adaptive.m3u8' }] },
+  { name: 'Live TV 10', sources: [{ label: 'Default', url: 'https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8' }] },
+  { name: 'Live TV 11', sources: [{ label: 'Default', url: 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8' }] },
+  { name: 'Live TV 12', sources: [{ label: 'Default', url: 'https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8' }] }
 ];
 
-const topBar=document.getElementById('top-channels');
-const bottomBar=document.getElementById('bottom-channels');
-const player=document.getElementById('player');
-const qualityList=document.getElementById('quality-list');
-let currentIndex=-1;
-let hls=null;
+/* عناصر DOM */
+const channelsContainer = document.getElementById('channels');
+const modalBack = document.getElementById('modalBack');
+const sourcesList = document.getElementById('sourcesList');
+const modalTitle = document.getElementById('modalTitle');
+const openBrowserBtn = document.getElementById('openBrowserBtn');
+const playStoreBtn = document.getElementById('playStoreBtn');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const localWarn = document.getElementById('localWarn');
 
-function createTile(ch,i){
-const tile=document.createElement('div');
-tile.className='channel-tile';
-tile.dataset.index=i;
-let logo=logoDefault;
-if(ch.name==='Live TV 1'||ch.name==='Live TV 2') logo=logoLive12;
-if(ch.name==='Live TV 3') logo=logoLive3;
-const label=document.createElement('div'); label.className='channel-label'; label.textContent=ch.name;
-const img=document.createElement('img'); img.src=logo; img.alt=ch.name;
-tile.appendChild(label); tile.appendChild(img);
-tile.addEventListener('click',()=>openChannel(i));
-return tile;
+const XPOLA_PACKAGE = 'com.xpola.player';
+const XPOLA_PLAYSTORE = 'https://play.google.com/store/apps/details?id=' + XPOLA_PACKAGE;
+
+/* تحذير إذا الصفحة ليست على https (يظهر داخل المودال) */
+function checkHttps() {
+  if (location.protocol !== 'https:') {
+    localWarn.style.display = 'block';
+  } else {
+    localWarn.style.display = 'none';
+  }
 }
 
-channels.forEach((ch,i)=>{
-const tile=createTile(ch,i);
-if(i<6) topBar.appendChild(tile); else bottomBar.appendChild(tile);
+/* بناء واجهة القنوات */
+channels.forEach((ch, idx) => {
+  const tile = document.createElement('div');
+  tile.className = 'channel-tile';
+  tile.dataset.index = idx;
+
+  const logo = document.createElement('img');
+  logo.className = 'logo';
+  logo.src = 'https://llaaddzz.neocities.org/1755383532388.jpg';
+  logo.alt = ch.name;
+
+  const label = document.createElement('div');
+  label.className = 'channel-label';
+  label.textContent = ch.name;
+
+  tile.appendChild(logo);
+  tile.appendChild(label);
+  tile.addEventListener('click', () => openSourcesModal(idx));
+  channelsContainer.appendChild(tile);
 });
 
-function setActiveChannel(index){
-document.querySelectorAll('.channel-tile').forEach(el=>el.classList.remove('active'));
-const el=document.querySelector(`.channel-tile[data-index="${index}"]`);
-if(el) el.classList.add('active');
-currentIndex=index;
+/* افتح المودال وأعرض المصادر */
+let currentSources = [];
+function openSourcesModal(index) {
+  const ch = channels[index];
+  currentSources = ch.sources || [];
+  modalTitle.textContent = ch.name + ' — اختر المصدر';
+  sourcesList.innerHTML = '';
+  currentSources.forEach(src => {
+    const btn = document.createElement('div');
+    btn.className = 'src-btn';
+    btn.textContent = src.label;
+    btn.addEventListener('click', () => {
+      tryOpenInXPola(src.url);
+    });
+    sourcesList.appendChild(btn);
+  });
+  checkHttps();
+  modalBack.style.display = 'flex';
 }
 
-function openChannel(i){
-const ch=channels[i];
-setActiveChannel(i);
-renderQuality(ch);
-}
+/* اغلاق المودال */
+closeModalBtn.addEventListener('click', () => { modalBack.style.display='none'; });
 
-function renderQuality(ch){
-qualityList.innerHTML='';
-if(!ch.urls||ch.urls.length===0){ alert("⚠️ اختر المصدر حتى تفتح القناة"); return; }
-ch.urls.forEach((u,j)=>{
-const q=document.createElement('div'); q.className='quality-item';
-q.textContent="اضغط للمشاهدة مصدر "+(j+1);
-q.addEventListener('click',()=>{
-document.querySelectorAll('.quality-item').forEach(x=>x.classList.remove('active'));
-q.classList.add('active');
-
-if(hls){ try{ hls.destroy(); }catch(e){} hls=null; }
-
-if(Hls.isSupported()){
-hls=new Hls();
-hls.loadSource(u);
-hls.attachMedia(player);
-player.play().catch(()=>{});
-}else if(player.canPlayType('application/vnd.apple.mpegurl')){
-player.src=u; player.play().catch(()=>{});
-}else{ alert("⚠️ المتصفح لا يدعم تشغيل هذا النوع من البث."); }
+/* افتح بالمتصفح كخيار احتياطي */
+openBrowserBtn.addEventListener('click', () => {
+  if (currentSources.length) window.open(currentSources[0].url, '_blank');
 });
-qualityList.appendChild(q);
-});
+
+/* زر توجيه لسوق بلاي */
+playStoreBtn.addEventListener('click', () => { window.open(XPOLA_PLAYSTORE, '_blank'); });
+
+/* --------- محاولة فتح Intent بطريقة موثوقة ---------
+   نستخدم intent:// URI مع S.browser_fallback_url ليفتح الرابط مباشرة في حالة فشل intent (fallback)
+   ونطبق فحص قصير (visibility) لمعرفة ما إذا الفتح نجح، وإذا لا نعرض رسالة أو نفتح نسخة المتصفح.
+   ملاحظة: يجب استضافة الصفحة على HTTPS لتعمل روابط TS بشكل صحيح عبر التطبيقات.
+-----------------------------------------------------*/
+function buildIntentUrl(url) {
+  // نضع fallback إلى نفس الـ URL (يفتح في المتصفح إذا التطبيق غير مثبت)
+  const fallback = encodeURIComponent(url);
+  // جزء بعد intent:// يجب أن يكون بدون scheme (https://)
+  const withoutScheme = url.replace(/^https?:\/\//i, '');
+  // ننشئ الـ Intent string
+  return `intent://${withoutScheme}#Intent;scheme=https;package=${XPOLA_PACKAGE};S.browser_fallback_url=${fallback};end`;
 }
 
-window.addEventListener('keydown',(e)=>{
-if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
-if(currentIndex===-1) currentIndex=0;
-currentIndex=(e.key==='ArrowLeft')?(currentIndex-1+channels.length)%channels.length:(currentIndex+1)%channels.length;
-openChannel(currentIndex);
+function tryOpenInXPola(url) {
+  // إذا لم تكن URL صحيحة، نخبر المستخدم
+  if (!url) return alert('لا يوجد رابط لهذا المصدر.');
+
+  const intent = buildIntentUrl(url);
+
+  // سجل الوقت ثم حاول فتح الـ intent
+  const start = Date.now();
+
+  // افتح الـ intent
+  window.location.href = intent;
+
+  // بعد وقت قصير نتحقق إن الصفحة لم تُخفَ (يعني التطبيق لم يفتح)
+  setTimeout(() => {
+    const elapsed = Date.now() - start;
+    // لو ظل المستخدم على الصفحة، فنفترض أن التطبيق لم يفتح
+    if (!document.hidden && elapsed < 2500) {
+      // عرض خيار المستخدم لفتح الرابط في المتصفح أو تثبيت التطبيق
+      const ok = confirm('يبدو أن التطبيق لم يُفتح تلقائياً. تريد فتح الرابط في المتصفح بدلاً من ذلك؟ (اختيار نعم = فتح في المتصفح)');
+      if (ok) {
+        window.open(url, '_blank');
+      } else {
+        // نعرض زر التثبيت
+        if (confirm('هل تريد الانتقال لمتجر Google Play لتثبيت XPola؟')) {
+          window.open(XPOLA_PLAYSTORE, '_blank');
+        }
+      }
+    }
+  }, 1400);
 }
-});
+
+/* فحص أولي */
+checkHttps();
+
 </script>
-
 </body>
 </html>
