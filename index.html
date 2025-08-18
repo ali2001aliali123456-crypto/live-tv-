@@ -149,7 +149,7 @@ nav button:hover{
   cursor:pointer; 
   box-shadow:0 3px 8px rgba(255,255,255,0.2); 
   transition:0.3s; 
-  background:#333; 
+  background:var(--background-dark); 
 }
 .channel-icon img, .radio-icon img{ 
   width:100%; 
@@ -227,7 +227,8 @@ body.light .channel-icon{
   box-shadow: 0 3px 8px rgba(0,0,0,0.2); 
 }
 body.light .channel-icon:hover{ 
-  box-shadow:0 0 15px rgba(0,0,0,0.5),0 0 25px rgba(255,152,0,0.4); 
+  transform:scale(1.15); 
+  box-shadow:0 0 15px rgba(0,0,0,0.5),0 0 25px rgba(255,87,34,0.4); 
 }
 
 .player-controls {
@@ -271,6 +272,7 @@ body.light .channel-icon:hover{
 #player-container .fullscreen-btn:hover {
     background: rgba(0, 0, 0, 0.7);
 }
+
 </style>
 </head>
 <body>
@@ -280,33 +282,36 @@ body.light .channel-icon:hover{
 </header>
 
 <nav>
-  <button onclick="showSection('channels')">القنوات</button>
-  <button onclick="showSection('radios')">الصوتيات </button>
-  <button onclick="toggleTheme()">تبديل الوضع⚪⚫</button>
+  <button onclick="showSection('channels')">القنوات⚽📺</button>
+  <button onclick="showSection('radios')">الصوتيات 🎤⚽</button>
+  <button onclick="toggleTheme()">تبديل الوضع</button>
   <a href="https://t.me/o10_6" target="_blank"><button>تليجرام</button></a>
   <a href="https://t.me/alilivetv12" target="_blank"><button>معلومات/تواصل</button></a>
 </nav>
 
-<div class="section-title">📺 البث التلفزيوني</div>
-<div id="player-container">
-  <div id="current-channel-name"></div>
-  <video id="player" controls autoplay></video>
-  <button class="fullscreen-btn" onclick="toggleFullscreen()">📺</button>
-  <div class="player-controls">
-    <button onclick="changeChannel(-1)">▶️</button>
-    <button onclick="changeChannel(1)">◀️</button>
+<div id="channels-section">
+  <div class="section-title">📺 البث التلفزيوني</div>
+  <div id="player-container">
+    <div id="current-channel-name"></div>
+    <video id="player" controls autoplay></video>
+    <div class="player-controls">
+      <button onclick="changeChannel(-1)">➡️</button>
+      <button onclick="changeChannel(1)">⬅️</button>
+    </div>
+    <div id="quality-bar" class="sources"></div>
   </div>
-  <div id="quality-bar" class="sources"></div>
+  <div class="channels" id="channels-container"></div>
 </div>
-<div class="channels" id="channels-container"></div>
 
-<div class="section-title">🎧 الصوتيات</div>
-<div id="radio-container">
-  <div id="current-radio-name"></div>
-  <audio id="radio-player" controls></audio>
-  <div id="radio-quality-bar" class="sources"></div>
+<div id="radios-section" style="display: none;">
+  <div class="section-title">🎧 الصوتيات</div>
+  <div id="radio-container">
+    <div id="current-radio-name"></div>
+    <audio id="radio-player" controls></audio>
+    <div id="radio-quality-bar" class="sources"></div>
+  </div>
+  <div class="radios" id="radios-container"></div>
 </div>
-<div class="radios" id="radios-container"></div>
 
 <div class="footer">
 جميع الحقوق محفوظة © <a href="https://t.me/alilivetv12" target="_blank">قناة التلي</a>
@@ -357,6 +362,8 @@ const container=document.getElementById('channels-container');
 const qualityBar=document.getElementById('quality-bar');
 const video=document.getElementById('player');
 const channelNameDisplay=document.getElementById('current-channel-name');
+const channelsSection = document.getElementById('channels-section');
+const radiosSection = document.getElementById('radios-section');
 
 channels.forEach((ch,i)=>{
   const div=document.createElement('div');
@@ -447,8 +454,17 @@ function updateRadioQualityButtons(index,currentQuality){
 }
 
 function showSection(section){
-  if(section==='channels'){ document.getElementById('player-container').style.display='block'; document.getElementById('radio-container').style.display='none'; }
-  else{ document.getElementById('radio-container').style.display='block'; document.getElementById('player-container').style.display='none'; }
+  if(section==='channels'){ 
+    channelsSection.style.display = 'block';
+    radiosSection.style.display = 'none';
+    document.getElementById('player-container').style.display='block';
+    document.getElementById('radio-container').style.display='none';
+  } else {
+    radiosSection.style.display = 'block';
+    channelsSection.style.display = 'none';
+    document.getElementById('radio-container').style.display='block';
+    document.getElementById('player-container').style.display='none';
+  }
 }
 
 function toggleTheme(){ document.body.classList.toggle('light'); }
