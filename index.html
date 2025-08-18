@@ -2,7 +2,6 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
-
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
 /* الخطوط */
@@ -255,12 +254,28 @@ body.light .channel-icon:hover{
 .player-controls button:hover {
   opacity: 1;
 }
+
+#player-container .fullscreen-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 10;
+}
+#player-container .fullscreen-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
 </style>
 </head>
 <body>
 
 <header>
-  
   <div class="menu">☰</div>
 </header>
 
@@ -276,9 +291,10 @@ body.light .channel-icon:hover{
 <div id="player-container">
   <div id="current-channel-name"></div>
   <video id="player" controls autoplay></video>
+  <button class="fullscreen-btn" onclick="toggleFullscreen()">📺</button>
   <div class="player-controls">
-    <button onclick="changeChannel(-1)">▶️</button>
-    <button onclick="changeChannel(1)">◀️</button>
+    <button onclick="changeChannel(-1)">◀️</button>
+    <button onclick="changeChannel(1)">▶️</button>
   </div>
   <div id="quality-bar" class="sources"></div>
 </div>
@@ -449,111 +465,6 @@ function toggleFullscreen() {
     video.requestFullscreen();
   }
 }
-</script>
-</body>
-</html>{name:'Live TV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8','https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8']},
-{name:'Live TV 3', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 4', urls:['https://cdn404.canlitvme.com/idmantv.m3u8?tkn=SZWQMHMLzCwF6o0Fa579Wg&tms=1755484818&hst=tv.canlitvme.com&ip=169.224.32.67','']}, // المصدر الثاني فاضي تضيف انت الرابط
-{name:'Live TV 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 7', urls:['https://cdn403.canlitvme.com/cbcsport.m3u8?tkn=yNtGoWTZrtwqRd2VlyDQHg&tms=1755485106&hst=tv.canlitvme.com&ip=169.224.32.67','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 8', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 9', urls:['https://pepsi.abntv.live/hls/4spstream.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 10', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']},
-{name:'Live TV 11', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},
-{name:'Live TV 12', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8']}
-];
-const container=document.getElementById('channels-container');
-const qualityBar=document.getElementById('quality-bar');
-const video=document.getElementById('player');
-const channelNameDisplay=document.getElementById('current-channel-name');
-
-channels.forEach((ch,i)=>{
-  const div=document.createElement('div');
-  div.className='channel-container';
-  const logoSrc = logos[ch.name] || logos.default;
-  div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logoSrc}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;
-  container.appendChild(div);
-});
-
-let currentChannel=0;
-function updateQualityButtons(channelIndex){
-  qualityBar.innerHTML='';
-  channels[channelIndex].urls.forEach((url,j)=>{
-    const btn=document.createElement('button');
-    btn.textContent='مصدر '+(j+1);
-    btn.className='quality-btn';
-    if(j===0) btn.classList.add('active');
-    btn.onclick=()=>{
-      video.src=url;
-      video.play();
-      document.querySelectorAll('.quality-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    };
-    qualityBar.appendChild(btn);
-  });
-}
-
-function playChannel(index){
-  currentChannel=index;
-  video.src=channels[index].urls[0];
-  video.play();
-  updateQualityButtons(index);
-  channelNameDisplay.textContent=channels[index].name;
-  document.getElementById('player-container').style.display='block';
-  document.getElementById('radio-container').style.display='none';
-}
-
-// ====== الراديو ======
-const radios=[
-{name:'live 1', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm/1M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm/1L'},
-{name:'live 2', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2L'},
-{name:'live 3', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3L'},
-{name:'live 4', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4L'},
-{name:'live 5', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5L'}
-];
-
-const radioContainer=document.getElementById('radios-container');
-const radioPlayer=document.getElementById('radio-player');
-const radioNameDisplay=document.getElementById('current-radio-name');
-const radioQualityBar=document.getElementById('radio-quality-bar');
-
-radios.forEach((r,i)=>{
-  const div=document.createElement('div');
-  div.className='radio-container';
-  div.innerHTML=`<div class="radio-icon" onclick="playRadio(${i},'strong')" title="${r.name}"><img src="${logos.radio}" alt="${r.name}"></div><div class="radio-name">${r.name}</div>`;
-  radioContainer.appendChild(div);
-});
-
-function playRadio(index, quality){
-  radioPlayer.src = radios[index][quality];
-  radioPlayer.play();
-  radioNameDisplay.textContent = radios[index].name + ' - ' + (quality==='strong' ? 'نت قوي' : 'نت ضعيف');
-  updateRadioQualityButtons(index, quality);
-  document.getElementById('radio-container').style.display = 'block';
-  document.getElementById('player-container').style.display = 'none';
-}
-
-function updateRadioQualityButtons(index,currentQuality){
-  radioQualityBar.innerHTML='';
-  ['strong','weak'].forEach(q=>{
-    const btn=document.createElement('button');
-    btn.textContent = q==='strong'?'نت قوي':'نت ضعيف';
-    btn.className='quality-btn';
-    if(q===currentQuality) btn.classList.add('active');
-    btn.onclick=()=>{ playRadio(index,q); };
-    radioQualityBar.appendChild(btn);
-  });
-}
-
-function showSection(section){
-  if(section==='channels'){ document.getElementById('player-container').style.display='block'; document.getElementById('radio-container').style.display='none'; }
-  else{ document.getElementById('radio-container').style.display='block'; document.getElementById('player-container').style.display='none'; }
-}
-
-function toggleTheme(){ document.body.classList.toggle('light'); }
-
-window.addEventListener('load',()=>{ playChannel(0); });
 </script>
 </body>
 </html>
