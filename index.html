@@ -82,7 +82,6 @@ nav button:hover{
 }
 
 #player-container, #radio-container{ 
-  display:none; 
   position:relative; 
   width:90%; 
   max-width:850px; 
@@ -286,7 +285,7 @@ body.light .channel-icon:hover{
   <button onclick="showSection('radios')">الصوتيات 🎤⚽</button>
   <button onclick="toggleTheme()">تبديل الوضع</button>
   <a href="https://t.me/o10_6" target="_blank"><button>تليجرام</button></a>
-  <a href="https://t.me/alilivetv12" target="_blank"><button>معلومات/تواصل</button></a>
+  <a href="https://t.me/alialiah123456" target="_blank"><button>معلومات/تواصل</button></a>
 </nav>
 
 <div id="channels-section">
@@ -361,9 +360,9 @@ const logos = {
   "Live TV 37":"https://llaaddzz.neocities.org/1755383532388.jpg",
   "Live TV 38":"https://llaaddzz.neocities.org/Irib_varzesh_tv_logo.png",
   "Live TV 39":"https://llaaddzz.neocities.org/IRIB_TV3_LOGO.png",
-  "Live TV 40":"https://llaaddzz.neocities.org/1755383532388.jpg",
-  "Live TV 41":"https://llaaddzz.neocities.org/1755383532388.jpg",
-  "Live TV 42":"https://llaaddzz.neocities.org/تنزيل%20(3).png"
+  "Live TV 40":['',''],
+  "Live TV 41":['',''],
+  "Live TV 42":"https://vo-live-media.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel1/HLS/stream_04/index.m3u8"
 };
 
 const channels=[
@@ -473,8 +472,7 @@ function playChannel(index){
       video.poster = ''; // إخفاء الصورة للقنوات الأخرى
   }
   
-  document.getElementById('player-container').style.display='block';
-  document.getElementById('radio-container').style.display='none';
+  // لا حاجة لإظهار المشغل لأنه سيكون مرئياً دائماً
 }
 
 function changeChannel(direction) {
@@ -533,13 +531,9 @@ function showSection(section){
   if(section==='channels'){ 
     channelsSection.style.display = 'block';
     radiosSection.style.display = 'none';
-    document.getElementById('player-container').style.display='block';
-    document.getElementById('radio-container').style.display='none';
   } else {
     radiosSection.style.display = 'block';
     channelsSection.style.display = 'none';
-    document.getElementById('radio-container').style.display='block';
-    document.getElementById('player-container').style.display='none';
   }
 }
 
