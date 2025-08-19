@@ -286,7 +286,7 @@ body.light .channel-icon:hover{
   <button onclick="showSection('radios')">الصوتيات 🎤⚽</button>
   <button onclick="toggleTheme()">تبديل الوضع</button>
   <a href="https://t.me/o10_6" target="_blank"><button>تليجرام</button></a>
-  <a href="https://t.me/alialiah123456" target="_blank"><button>معلومات/تواصل</button></a>
+  <a href="https://t.me/alilivetv12" target="_blank"><button>معلومات/تواصل</button></a>
 </nav>
 
 <div id="channels-section">
@@ -314,13 +314,14 @@ body.light .channel-icon:hover{
 </div>
 
 <div class="footer">
-جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>
+جميع الحقوق محفوظة © <a href="https://t.me/alilivetv12" target="_blank">قناة التلي</a>
 </div>
 
 <script>
 const logos = { 
   "default":"https://llaaddzz.neocities.org/1755383532388.jpg", 
   "radio":"https://llaaddzz.neocities.org/1755383532388.jpg",
+  "القرآن الكريم":"https://llaaddzz.neocities.org/images.jpeg",
   "SuperTV 1":"https://llaaddzz.neocities.org/unnamed.png",
   "SuperTV 2":"https://llaaddzz.neocities.org/unnamed.png",
   "SuperTV 3":"https://llaaddzz.neocities.org/unnamed.png",
@@ -366,6 +367,8 @@ const logos = {
 };
 
 const channels=[
+  // قناة القرآن الكريم
+  {name:'القرآن الكريم', urls:['https://qurango.net/radio/ahmad_alajmy']},
   // قنوات SuperTV العشرة
   {name:'SuperTV 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8', 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_720.m3u8', 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8']},
   {name:'SuperTV 2', urls:['https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_360.m3u8', 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_720.m3u8', 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8']},
@@ -377,7 +380,7 @@ const channels=[
   {name:'SuperTV 8', urls:['https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_360.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_720.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_1080.m3u8']},
   {name:'SuperTV 9', urls:['https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_360.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_720.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_1080.m3u8']},
   {name:'SuperTV 10', urls:['https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_360.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_720.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_1080.m3u8']},
-  // قنوات Veo Sports الجديدة
+  // قنوات Veo Sports
   {name:'Veo Sports 1', urls:['https://stream.veo.buzz:6072/sport/ch1/ch1_360.m3u8', 'https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', 'https://stream.veo.buzz:6072/sport/ch1/ch1_1080.m3u8']},
   {name:'Veo Sports 2', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_1080.m3u8']},
   {name:'Veo Sports 3', urls:['https://stream.veo.buzz:6074/sport/ch3/ch3_360.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_720.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_1080.m3u8']},
@@ -394,7 +397,7 @@ const channels=[
   {name:'Veo Sports 14', urls:['https://stream.veo.buzz:6085/sport/ch14/ch14_360.m3u8', 'https://stream.veo.buzz:6085/sport/ch14/ch14_720.m3u8', 'https://stream.veo.buzz:6085/sport/ch14/ch14_1080.m3u8']},
   {name:'Veo Sports 15', urls:['https://stream.veo.buzz:6086/sport/ch15/ch15_360.m3u8', 'https://stream.veo.buzz:6086/sport/ch15/ch15_720.m3u8', 'https://stream.veo.buzz:6086/sport/ch15/ch15_1080.m3u8']},
   {name:'Veo Sports 16', urls:['https://stream.veo.buzz:6087/sport/ch16/ch16_360.m3u8', 'https://stream.veo.buzz:6087/sport/ch16/ch16_720.m3u8', 'https://stream.veo.buzz:6087/sport/ch16/ch16_1080.m3u8']},
-  // القنوات القديمة مع تعديل أسمائها
+  // القنوات القديمة
   {name:'Live TV 27', urls:['https://solhtvhls.wns.live/hls/stream.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_1080.m3u8']},
   {name:'Live TV 28', urls:['https://wo.cma.footballii.ir/hls2/b3_high.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_360.m3u8']},
   {name:'Live TV 29', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8']},
@@ -431,14 +434,14 @@ channels.forEach((ch,i)=>{
 let currentChannel=0;
 function updateQualityButtons(channelIndex){
   qualityBar.innerHTML='';
-  // هنا يتم إنشاء أزرار الجودة (مثل 360p, 720p, 1080p)
   const channelUrls = channels[channelIndex].urls;
   const qualities = ['360p', '720p', '1080p'];
   channelUrls.forEach((url, j) => {
     if (url) {
       const btn = document.createElement('button');
-      // إذا كانت القناة من SuperTV أو Veo Sports، استخدم أسماء الجودة
-      if ((channelIndex >= 0 && channelIndex <= 9) || (channelIndex >= 10 && channelIndex <= 25)) {
+      if (channelIndex === 0) { // للقناة الأولى (القرآن الكريم)
+        btn.textContent = `صوت فقط`;
+      } else if ((channelIndex >= 1 && channelIndex <= 10) || (channelIndex >= 11 && channelIndex <= 26)) {
         btn.textContent = qualities[j] || `مصدر ${j + 1}`;
       } else {
         btn.textContent = `مصدر ${j + 1}`;
@@ -462,6 +465,14 @@ function playChannel(index){
   video.play();
   updateQualityButtons(index);
   channelNameDisplay.textContent=channels[index].name;
+  
+  // التحكم في الصورة الظاهرة في المشغل
+  if (channels[index].name === 'القرآن الكريم') {
+      video.poster = 'https://llaaddzz.neocities.org/1755383532388.jpg';
+  } else {
+      video.poster = ''; // إخفاء الصورة للقنوات الأخرى
+  }
+  
   document.getElementById('player-container').style.display='block';
   document.getElementById('radio-container').style.display='none';
 }
