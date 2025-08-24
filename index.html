@@ -4,6 +4,9 @@
 <head>  
 <meta charset="utf-8" />  
 <meta name="viewport" content="width=device-width, initial-scale=1" />  
+<title>بث مباشر للقنوات الرياضية | قنوات ka-sport</title>  
+<meta name="description" content="شاهد القنوات الرياضية وقنوات القرآن الكريم مباشرةً مجانًا. قنوات ka-sport للبث المباشر.">  
+<meta name="keywords" content="قنوات رياضية, بث مباشر, ka-sport, مشاهدة قنوات, قناة القرآن الكريم, بث مجاني">  
 <style>  
 /* الخطوط */  
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');  /* الألوان الجديدة /
@@ -24,11 +27,16 @@ background: var(--background-dark);
 color: var(--text-light);
 text-align:center; transition:0.3s;
 overflow-x: hidden;
+/* إضافة الخلفية هنا */
+background-image: url('https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg');
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
 }
 
-/* الرأسية الجديدة /
+/* الرأسية الجديدة */
 header {
-background:rgba(0,0,0,0.3);
+background:transparent; /* تم تغيير اللون إلى شفاف */
 padding:10px 15px;
 display:flex; justify-content:flex-start;
 align-items:center;
@@ -48,13 +56,13 @@ align-items: center;
 flex-wrap: wrap;
 }
 header .menu-items a {
-color: var(--text-light);
+color: var(--text-light); /* تم تغيير اللون إلى النص الفاتح */
 text-decoration: none;
 font-size: 0.8em;
 padding: 5px 8px;
 border-radius: 5px;
 transition: background-color 0.3s;
-background: var(--card-dark);
+background: var(--card-dark); /* تم تغيير اللون إلى بطاقة داكنة */
 }
 header .menu-items a:hover {
 background-color: rgba(255, 255, 255, 0.1);
@@ -311,6 +319,13 @@ background: rgba(0, 0, 0, 0.7);
     <button onclick="toggleFullscreen()" class="fullscreen-btn">⛶</button>  
   </div>  
   <div class="channels" id="channels-container"></div>  
+  
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="https://t.me/alialiah123456" target="_blank">
+      <img src="https://llaaddzz.neocities.org/IMG_20250824_142606_221.jpg" alt="رابط قناة التلغرام" style="width: 90%; max-width: 850px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+    </a>
+  </div>
+
 </div>  <div id="radios-section" style="display: none;">  
   <div class="section-title">🎧 الصوتيات</div>  
   <div id="radio-container">  
@@ -330,52 +345,18 @@ const logos = {
   
 const channels=[  
   // قناة القرآن الكريم  
-  {name:'القرآن الكريم', urls:['https://qurango.net/radio/ahmad_alajmy']},  
+  {name:'القرآن الكريم', logo:'https://llaaddzz.neocities.org/images.jpeg', urls:['https://qurango.net/radio/ahmad_alajmy']},  
   // قنوات ka-sport 1-10  
-  {name:'ka-sport 1', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8', 'https://wo.cma.footballii.ir/hls2/b1.m3u8', 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/10934.m3u8', 'https://wo.cma.footballii.ir/hls2/b1_src.m3u8', 'http://sansat.cc:88/live/02025033583654/1680219086/661030.ts', 'http://xtream-ie.org:80/live/yusf4k/yusf4k/44324.ts', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1021.m3u8', 'http://iptv-premium-ott.com:8789/live/GHU63295/CFM90315/13682.ts', 'https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', '', '']},   
-  {name:'ka-sport 2', urls:['https://dk.wo.footballii.ir:443/hls2/b2_low.m3u8','https://dk.wo.footballii.ir:443/hls2/b2_high.m3u8', 'http://bdd00.4rouwanda-shop.store/live/69854211/index.m3u8?t=q04vlmPbEVvLtw8vR3RKUQ&e=1755847438', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1022.m3u8', 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/165652.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4400', 'http://sansat.cc:88/live/02025033583654/1680219086/852919.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/55.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},   
-  {name:'ka-sport 3', urls:['https://edge19.620097.ir.cdn.ir/hls2/b3.m3u8', 'https://wo.cma.footballii.ir/hls2/b3_high.m3u8', 'https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8', 'http://sansat.cc:88/live/02025033583654/1680219086/852922.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', 'https://stream2.removie.raha.af:443/live/smil:lemartv.smil/chunklist_w1519371652_b1500000.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_720.m3u8', '']},  
-  {name:'ka-sport 4', urls:['http://bdd00.4rouwanda-shop.store/live/0103088447/index.m3u8?t=-aOgdueF6oK_RbG5R7W1oQ&e=1755856413', 'https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_720.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4402', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', '', '', '', '']},  
-  {name:'ka-sport 5', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_360.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_720.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8', '', '']},  
-  {name:'ka-sport 6', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_360.m3u8', 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_720.m3u8', 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8', '', '']},  
-  {name:'ka-sport 7', urls:['https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_360.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_720.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_1080.m3u8', '', '']},  
-  {name:'ka-sport 8', urls:['https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_360.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_720.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_1080.m3u8', '', '']},  
-  {name:'ka-sport 9', urls:['https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_360.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_720.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_1080.m3u8', '', '']},  
-  {name:'ka-sport 10', urls:['https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_360.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_720.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_1080.m3u8', '', '']},  
-  // قنوات ka-sport 11-26  
-  {name:'ka-sport 11', urls:['https://stream.veo.buzz:6072/sport/ch1/ch1_360.m3u8', 'https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', 'https://stream.veo.buzz:6072/sport/ch1/ch1_1080.m3u8', 'https://aucjsv.5606087801.art:8443/hls/jpe9zodoh.m3u8?s=Yt_bIF1pN3xCAulzEmhW5Q&e=1755975677', '']},  
-  {name:'ka-sport 12', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_1080.m3u8', '', '']},  
-  {name:'ka-sport 13', urls:['https://stream.veo.buzz:6074/sport/ch3/ch3_360.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_720.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_1080.m3u8', '', '']},  
-  {name:'ka-sport 14', urls:['https://stream.veo.buzz:6075/sport/ch4/ch4_360.m3u8', 'https://stream.veo.buzz:6075/sport/ch4/ch4_720.m3u8', 'https://stream.veo.buzz:6075/sport/ch4/ch4_1080.m3u8', '', '']},  
-  {name:'ka-sport 15', urls:['https://stream.veo.buzz:6076/sport/ch5/ch5_360.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/48103.m3u8', 'https://stream.veo.buzz:6076/sport/ch5/ch5_1080.m3u8', '', '']},  
-  {name:'ka-sport 16', urls:['https://stream.veo.buzz:6077/sport/ch6/ch6_360.m3u8', 'https://stream.veo.buzz:6077/sport/ch6/ch6_720.m3u8', 'https://stream.veo.buzz:6077/sport/ch6/ch6_1080.m3u8', '', '']},  
-  {name:'ka-sport 17', urls:['https://stream.veo.buzz:6078/sport/ch7/ch7_360.m3u8', 'https://stream.veo.buzz:6078/sport/ch7/ch7_720.m3u8', 'https://stream.veo.buzz:6078/sport/ch7/ch7_1080.m3u8', '', '']},  
-  {name:'ka-sport 18', urls:['https://stream.veo.buzz:6079/sport/ch8/ch8_360.m3u8', 'https://dmitwlvvll.cdn.mangomolo.com/dubaisportshd5/smil:dubaisportshd5.smil/chunklist.m3u8', 'https://stream.veo.buzz:6079/sport/ch8/ch8_1080.m3u8', '', '']},  
-  {name:'ka-sport 19', urls:['https://stream.veo.buzz:6080/sport/ch9/ch9_360.m3u8', 'https://stream.veo.buzz:6080/sport/ch9/ch9_720.m3u8', 'https://stream.veo.buzz:6080/sport/ch9/ch9_1080.m3u8', '', '']},  
-  {name:'ka-sport 20', urls:['https://stream.veo.buzz:6081/sport/ch10/ch10_360.m3u8', 'https://stream.veo.buzz:6081/sport/ch10/ch10_720.m3u8', 'https://stream.veo.buzz:6081/sport/ch10/ch10_1080.m3u8', '', '']},  
-  {name:'ka-sport 21', urls:['https://stream.veo.buzz:6082/sport/ch11/ch11_360.m3u8', 'https://stream.veo.buzz:6082/sport/ch11/ch11_720.m3u8', 'https://stream.veo.buzz:6082/sport/ch11/ch11_1080.m3u8', '', '']},  
-  {name:'ka-sport 22', urls:['https://stream.veo.buzz:6083/sport/ch12/ch12_360.m3u8', 'https://stream.veo.buzz:6083/sport/ch12/ch12_720.m3u8', 'https://stream.veo.buzz:6083/sport/ch12/ch12_1080.m3u8', '', '']},  
-  {name:'ka-sport 23', urls:['https://stream.veo.buzz:6084/sport/ch13/ch13_360.m3u8', 'https://stream.veo.buzz:6084/sport/ch13/ch13_720.m3u8', 'https://stream.veo.buzz:6084/sport/ch13/ch13_1080.m3u8', '', '']},  
-  {name:'ka-sport 24', urls:['https://stream.veo.buzz:6085/sport/ch14/ch14_360.m3u8', 'https://stream.veo.buzz:6085/sport/ch14/ch14_720.m3u8', 'https://stream.veo.buzz:6085/sport/ch14/ch14_1080.m3u8', '', '']},  
-  {name:'ka-sport 25', urls:['https://stream.veo.buzz:6086/sport/ch15/ch15_360.m3u8', 'https://stream.veo.buzz:6086/sport/ch15/ch15_720.m3u8', 'https://stream.veo.buzz:6086/sport/ch15/ch15_1080.m3u8', '', '']},  
-  {name:'ka-sport 26', urls:['https://stream.veo.buzz:6087/sport/ch16/ch16_360.m3u8', 'https://stream.veo.buzz:6087/sport/ch16/ch16_720.m3u8', 'https://stream.veo.buzz:6087/sport/ch16/ch16_1080.m3u8', '', '']},  
-  // قنوات ka-sport 27-42  
-  {name:'ka-sport 27', urls:['https://solhtvhls.wns.live/hls/stream.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_1080.m3u8', '', '', '']},  
-  {name:'ka-sport 28', urls:['https://wo.cma.footballii.ir/hls2/b3_high.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_360.m3u8', '', '', '']},  
-  {name:'ka-sport 29', urls:['https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8','https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', '', '', '']},  
-  {name:'ka-sport 30', urls:['https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8','', '', '', '']},  
-  {name:'ka-sport 31', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', '', '', '']},  
-  {name:'ka-sport 32', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8', '', '', '']},  
-  {name:'ka-sport 33', urls:['https://mn-nl.mncdn.com/cbcsports_live/cbcsports/playlist.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', '', '', '']},  
-  {name:'ka-sport 34', urls:['https://stream.veo.buzz:6076/sport/ch4/adaptive.m3u8','https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', '', '', '']},  
-  {name:'ka-sport 35', urls:['https://pepsi.abntv.live/hls/4spstream.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8', '', '', '']},  
-  {name:'ka-sport 36', urls:['https://stream.veo.buzz:6078/sport/ch6/adaptive.m3u8','https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8', '', '', '']},  
-  {name:'ka-sport 37', urls:['https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8', '', '', '', '']},  
-  {name:'ka-sport 38', urls:['https://live-azd1118.telewebion.com:443/ek/varzesh/live/1080p/index.m3u8', '', '', '', '']},  
-  {name:'ka-sport 39', urls:['https://lenz.splus.ir/PLTV/88888888/224/3221226868/index.m3u8', '', '', '', '']},  
-  {name:'ka-sport 40', urls:['https://shls-live-ak.akamaized.net:443/out/v1/0965e4d7deae49179172426cbfb3bc5e/index_7.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/845', 'https://bdrgqp.6670391863.store:8443/hls/osus4s5wr2f.m3u8?s=5SW6jfwTwmcI7R84Pl9CcA&e=1755968217', '', '']},  
-  {name:'ka-sport 41', urls:['http://het113a.4rouwanda-shop.store/live/161988840/index.m3u8?t=41MTi8OYQkSupUMGb8L6Mw&e=1755841538', '', '', '', '']},  
-  {name:'ka-sport 42', urls:['https://vo-live-media.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel1/HLS/stream_04/index.m3u8', '', '', '', '']}  
+  {name:'ka-sport 1', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8', 'https://wo.cma.footballii.ir/hls2/b1.m3u8', 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/10934.m3u8', 'https://wo.cma.footballii.ir/hls2/b1_src.m3u8', 'http://sansat.cc:88/live/02025033583654/1680219086/661030.ts', 'http://xtream-ie.org:80/live/yusf4k/yusf4k/44324.ts', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1021.m3u8', 'http://iptv-premium-ott.com:8789/live/GHU63295/CFM90315/13682.ts', 'https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', '', '']},   
+  {name:'ka-sport 2', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://dk.wo.footballii.ir:443/hls2/b2_low.m3u8','https://dk.wo.footballii.ir:443/hls2/b2_high.m3u8', 'http://bdd00.4rouwanda-shop.store/live/69854211/index.m3u8?t=q04vlmPbEVvLtw8vR3RKUQ&e=1755847438', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1022.m3u8', 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/165652.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4400', 'http://sansat.cc:88/live/02025033583654/1680219086/852919.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/55.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},   
+  {name:'ka-sport 3', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://edge19.620097.ir.cdn.ir/hls2/b3.m3u8', 'https://wo.cma.footballii.ir/hls2/b3_high.m3u8', 'https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8', 'http://sansat.cc:88/live/02025033583654/1680219086/852922.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', 'https://stream2.removie.raha.af:443/live/smil:lemartv.smil/chunklist_w1519371652_b1500000.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_720.m3u8', '']},  
+  {name:'ka-sport 4', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['http://bdd00.4rouwanda-shop.store/live/0103088447/index.m3u8?t=-aOgdueF6oK_RbG5R7W1oQ&e=1755856413', 'https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_720.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4402', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', '', '', '', '']},  
+  {name:'ka-sport 5', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_360.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_720.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8', '', '']},  
+  {name:'ka-sport 6', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_360.m3u8', 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_720.m3u8', 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8', '', '']},  
+  {name:'ka-sport 7', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_360.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_720.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_1080.m3u8', '', '']},  
+  {name:'ka-sport 8', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_360.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_720.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_1080.m3u8', '', '']},  
+  {name:'ka-sport 9', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_360.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_720.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_1080.m3u8', '', '']},  
+  {name:'ka-sport 10', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_360.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_720.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_1080.m3u8', '', '']}
 ];  
   
 const container=document.getElementById('channels-container');  
@@ -398,7 +379,7 @@ channels.forEach((ch,i)=>{
       div.classList.add('ka-sport-27-42');  
   }  
   
-  const logoSrc = logos[(i === 0) ? ch.name : 'default'] || logos.default;  
+  const logoSrc = ch.logo || logos.default; /* تم تعديل هذا السطر لاستخدام الخاصية الجديدة */
   div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logoSrc}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;  
   container.appendChild(div);  
 });  
@@ -555,20 +536,15 @@ function toggleFullscreen() {
   }  
 }  
   
-</script>  <script type="text/javascript">  
-var sc_project=13157668;  
-var sc_invisible=0;  
-var sc_security="e22a1f62";  
-var scJsHost = "https://";  
-document.write("<sc"+"ript type='text/javascript' src='" +  
-scJsHost+  
-"statcounter.com/counter/counter.js'></"+"script>");  
-</script>  <noscript><div class="statcounter"><a title="Web Analytics"  
-href="https://statcounter.com/" target="_blank"><img  
-class="statcounter"  
-src="https://c.statcounter.com/13157668/0/e22a1f62/0/"  
-alt="Web Analytics"  
-referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-
+</script>  
+<script type="text/javascript">
+var sc_project=13157668; 
+var sc_invisible=0; 
+var sc_security="e22a1f62"; 
+var scJsHost = "https://";
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
 </body>  
 </html>
