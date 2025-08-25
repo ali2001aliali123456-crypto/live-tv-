@@ -126,13 +126,71 @@ border-radius:12px;
 background:var(--card-dark);
 }
 
-.channels, .radios{
+.channels, .radios, .xtream-list {
 display:grid;
 grid-template-columns:repeat(auto-fill, minmax(70px, 1fr));
 gap:10px;
 justify-items:center;
 margin:20px auto;
 max-width:1200px;
+}
+
+/* تنسيق جديد لقائمة الأكواد */
+.xtream-list {
+display: flex;
+flex-direction: column;
+gap: 15px;
+align-items: center;
+}
+.xtream-item {
+background: var(--card-dark);
+padding: 15px;
+border-radius: 12px;
+border: 1px solid var(--border-color);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+width: 90%;
+max-width: 600px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.xtream-item h3 {
+margin: 0;
+color: var(--primary-color);
+font-size: 1.2em;
+}
+.xtream-item .code-container {
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 10px;
+}
+.xtream-item pre {
+background: #0d0d1e;
+color: #e0e0e0;
+padding: 10px;
+border-radius: 8px;
+overflow-x: auto;
+flex-grow: 1;
+margin: 0;
+font-family: monospace;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+.xtream-item button {
+background: var(--primary-color);
+color: #fff;
+border: none;
+padding: 8px 12px;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.9em;
+font-weight: bold;
+transition: background-color 0.3s;
+}
+.xtream-item button:hover {
+background: #0097a7;
 }
 
 .channel-container, .radio-container{
@@ -304,6 +362,7 @@ background: rgba(0, 0, 0, 0.7);
   <div class="menu-items">  
     <a href="#" onclick="showSectionAndScroll('channels')">القنوات⚽📺</a>  
     <a href="#" onclick="showSectionAndScroll('radios')">الصوتيات 🎤⚽</a>  
+    <a href="#" onclick="showSectionAndScroll('xtream')">أكواد IPTV 🔑مجانيه اصغط</a>  
     <a href="https://t.me/alilivetv12/254" target="_blank">حمل مشغل القنوات📺✅</a>  
     <a href="https://t.me/alialiah123456" target="_blank">معلومات/تواصل</a>  
   </div>  
@@ -334,7 +393,14 @@ background: rgba(0, 0, 0, 0.7);
     <div id="radio-quality-bar" class="sources"></div>  
   </div>  
   <div class="radios" id="radios-container"></div>  
-</div>  <div class="footer">  
+</div>  
+
+<div id="xtream-section" style="display: none;">
+    <div class="section-title">🔑 أكواد اكستريم / IPTV</div>
+    <div id="xtream-container" class="xtream-list"></div>
+</div>
+
+<div class="footer">  
 جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>  
 </div>  <script>  
 const logos = {  
@@ -365,7 +431,66 @@ const video=document.getElementById('player');
 const channelNameDisplay=document.getElementById('current-channel-name');  
 const channelsSection = document.getElementById('channels-section');  
 const radiosSection = document.getElementById('radios-section');  
-  
+const xtreamSection = document.getElementById('xtream-section');
+const xtreamContainer = document.getElementById('xtream-container');
+
+// ====== أكواد IPTV الجديدة والمحدثة ======
+// يمكنك تعديل هذه القائمة أو إضافة أكواد جديدة هنا
+const xtreamCodes = [
+  { name: 'سيرفر شامنا', code: 'http://narab.live:2082/get.php?username=ahmad123&password=112233&type=m3u_plus&output=ts' },
+  { name: 'سيرفر اكستريم Atlaspro', code: 'http://line.atlaspro4k.me/get.php?username=0fd90cc2d7&password=7ad1d828cc7f&type=m3u_plus&output=ts' },
+  { name: 'سيرفر BLUE 4K', code: 'http://etihadtv.live:8080/get.php?username=osamahallani&password=9192529&type=m3u_plus&output=ts' },
+  { name: 'سيرفر الاتحاد', code: 'http://4z4.xyz:8080/get.php?username=rashad1alawadi&password=0046707531082aswe1&type=m3u_plus&output=hls' },
+  { name: 'سيرفر Zain', code: 'http://live.remorize.live:2082/get.php?username=mansouri&password=4hERcVkAtYcq&type=m3u_plus&output=ts' },
+  { name: 'كود slyip.tv', code: 'http://slyip.tv/get.php?username=4668241086179314&password=4668241086179314&type=m3u_plus&output=ts' },
+  { name: 'كود rfye55.xyz', code: 'http://rfye55.xyz:80/get.php?username=51GYZ3Q&password=G0N5T14&type=m3u_plus&output=ts' },
+  { name: 'كود Ardalan Rawanduze', code: 'http://p1.proiptv.co:88/get.php?username=R87646765&password=PCBF1LZFVGKXGZ4&type=m3u_plus' },
+  { name: 'كود dream4k.co (1)', code: 'http://dream4k.co:80/get.php?username=tni5znb1y3&password=q2lspqsb3i' },
+  { name: 'كود dream4k.co (2)', code: 'http://dream4k.co:80/get.php?username=3821836150904941&password=3cpvazya3j' },
+  { name: 'كود dream4k.co (3)', code: 'http://dream4k.co:8080/get.php?username=zv9uxorwdgh&password=gqpb3w3rhb' },
+  { name: 'كود oscartvland.tv', code: 'https://oscartvland.tv:80/get.php?username=ahmed123456789&password=123456789ahmed&type=m3u_plus' },
+  { name: 'كود tera4k.com', code: 'https://tera4k.com:8880/get.php?username=arab1one2aa22225&password=37032122927373&type=m3u_plus&output=ts' },
+  { name: 'سيرفر Beno 4K', code: 'http://beno4k.live:8080/get.php?username=123&password=123&type=m3u&output=ts' },
+  { name: 'سيرفر فوريفير العربي (1)', code: 'http://forevertv.me:2095/get.php?username=5599008877&password=lWp30tsbALrPOX&type=m3u&output=mpegts' },
+  { name: 'سيرفر فوريفير العربي (2)', code: 'http://forevertv.me:8080/get.php?username=1234578&password=Wq6wdahq497563&type=m3u_plus' },
+  { name: 'سيرفر سان سات SANSAT', code: 'http://sansat.cc:88/get.php?username=02025033583654&password=1680219086&type=m3u_plus' },
+  { name: 'كود istarpro.xyz (1)', code: 'http://istarpro.xyz:80/get.php?username=27593709031&password=4598009720&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (2)', code: 'http://istarpro.xyz:80/get.php?username=209711078134&password=66d48a0271709.25642&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (3)', code: 'http://istarpro.xyz:80/get.php?username=570027537&password=31247988&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (4)', code: 'http://istarpro.xyz:80/get.php?username=315167184510&password=66d4b179f1153.29010&type=m3u_plus&output=ts' },
+  { name: 'سيرفر 4k preimum', code: 'http://casper181.com/get.php?username=798204420350&password=223180302424&type=m3u_plus&output=ts' }
+];
+
+// وظيفة لنسخ الكود إلى الحافظة
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('تم نسخ الكود!');
+  } catch (err) {
+    console.error('فشل في النسخ:', err);
+    alert('فشل في نسخ الكود.');
+  }
+}
+
+// وظيفة لعرض الأكواد في الصفحة
+function renderXtreamCodes() {
+    xtreamContainer.innerHTML = ''; // تنظيف المحتوى القديم
+    xtreamCodes.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'xtream-item';
+        div.innerHTML = `
+            <h3>${item.name}</h3>
+            <div class="code-container">
+                <pre>${item.code}</pre>
+                <button onclick="copyToClipboard('${item.code}')">نسخ</button>
+            </div>
+        `;
+        xtreamContainer.appendChild(div);
+    });
+}
+// ====== نهاية أكواد IPTV ======
+
+
 channels.forEach((ch,i)=>{  
   const div=document.createElement('div');  
   div.className='channel-container';  
@@ -493,14 +618,24 @@ function updateRadioQualityButtons(index,currentQuality){
 }  
   
 function showSection(section){  
+  // إخفاء جميع الأقسام
+  channelsSection.style.display = 'none';  
+  radiosSection.style.display = 'none';  
+  xtreamSection.style.display = 'none';
+
+  // إيقاف تشغيل الفيديو والصوتيات
+  video.pause();
+  radioPlayer.pause();
+
+  // إظهار القسم المطلوب
   if(section==='channels'){  
     channelsSection.style.display = 'block';  
-    radiosSection.style.display = 'none';  
-  } else {  
-    radiosSection.style.display = 'block';  
-    channelsSection.style.display = 'none';  
-    video.pause();  
-  }  
+  } else if (section === 'radios') {
+    radiosSection.style.display = 'block';
+  } else if (section === 'xtream') {
+    xtreamSection.style.display = 'block';
+    renderXtreamCodes();
+  }
 }  
   
 function showSectionAndScroll(section) {  
