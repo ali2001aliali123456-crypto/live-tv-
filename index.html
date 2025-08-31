@@ -1,111 +1,692 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بث مباشر للمباريات</title>
-<style>
-  body { font-family: Arial, sans-serif; background:#121212; color:#fff; margin:0; padding:20px; }
-  .container { max-width: 900px; margin:auto; }
-  .match-card { border-radius:10px; padding:15px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:.2s; }
-  .match-card:hover { transform:translateY(-5px); }
-  .team { display:flex; align-items:center; }
-  .vs { font-weight:bold; font-size:1.5em; margin:0 20px; color:#ff5722; }
-  #liveStreamModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; justify-content:center; align-items:center; }
-  #modalContent { background:#1e1e1e; padding:20px; border-radius:10px; max-width:90%; text-align:center; }
-  .close-btn { float:left; color:#fff; font-size:30px; cursor:pointer; }
-  video { width:100%; max-height:400px; border-radius:10px; background:black; }
-  .sources button { margin:5px; padding:8px 12px; border:none; border-radius:6px; background:#ff5722; color:white; cursor:pointer; transition:.2s; }
-  .sources button:hover { background:#e64a19; }
-  footer { margin-top:50px; font-size:14px; color:#888; text-align:center; }
-  footer a { color:#ff5722; text-decoration:none; }
-  footer a:hover { text-decoration:underline; }
-</style>
-</head>
-<body>
 
-<div class="container">
-  <h1>بث مباشر livetv</h1>
-  <div id="matchesContainer"></div>
-</div>
+<html lang="ar" dir="rtl">  
+<head>  
+<meta charset="utf-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1" />  
+<title>بث مباشر للقنوات الرياضية | قنوات ka-sport</title>  
+<meta name="description" content="شاهد القنوات الرياضية وقنوات القرآن الكريم مباشرةً مجانًا. قنوات ka-sport للبث المباشر.">  
+<meta name="keywords" content="قنوات رياضية, بث مباشر, ka-sport, مشاهدة قنوات, قناة القرآن الكريم, بث مجاني">  
+<style>  
+/* الخطوط */  
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');  /* الألوان الجديدة /
+:root {
+--primary-color: #00bcd4; / أزرق و ابيض /
+--secondary-color: #ff5722; / برتقالي محترق */
+--background-dark: #1a1a2e;
+--card-dark: #2c2c44;
+--text-light: #e0e0e0;
+--border-color: #4a4a66;
+--box-shadow-color: rgba(0, 0, 0, 0.4);
+}
 
-<!-- نافذة البث -->
-<div id="liveStreamModal">
-  <div id="modalContent">
-    <span class="close-btn" onclick="closeLiveStream()">&times;</span>
-    <h3 id="matchTitle"></h3>
-    <div id="videoContainer"><video id="livePlayer" controls autoplay></video></div>
-    <div id="sources" class="sources"></div>
+body {
+margin:0; padding:0;
+font-family:'Tajawal', sans-serif;
+background: var(--background-dark);
+color: var(--text-light);
+text-align:center; transition:0.3s;
+overflow-x: hidden;
+/* إضافة الخلفية هنا */
+background-image: url('https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg');
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
+}
+
+/* الرأسية الجديدة */
+header {
+background:transparent; /* تم تغيير اللون إلى شفاف */
+padding:10px 15px;
+display:flex; justify-content:flex-start;
+align-items:center;
+box-shadow: 0 4px 15px var(--box-shadow-color);
+position: sticky;
+top: 0;
+z-index: 1000;
+}
+header .logo{
+/* تم إزالة هذا الكلاس بالكامل من HTML */
+display:none;
+}
+header .menu-items {
+display: flex;
+gap: 10px;
+align-items: center;
+flex-wrap: wrap;
+}
+header .menu-items a {
+color: var(--text-light); /* تم تغيير اللون إلى النص الفاتح */
+text-decoration: none;
+font-size: 0.8em;
+padding: 5px 8px;
+border-radius: 5px;
+transition: background-color 0.3s;
+background: var(--card-dark); /* تم تغيير اللون إلى بطاقة داكنة */
+}
+header .menu-items a:hover {
+background-color: rgba(255, 255, 255, 0.1);
+}
+
+.section-title{
+margin:25px 0 10px;
+font-size:1.8em;
+font-weight:bold;
+color:var(--primary-color);
+}
+
+/* المشغل مخفي افتراضياً */
+#player-container{
+display:none;
+position:relative;
+width:100%;
+max-width:850px;
+margin: 0 auto 10px;
+padding:5px;
+border-radius:0;
+border:none;
+background:linear-gradient(145deg, var(--card-dark), var(--background-dark));
+box-shadow:0 0 25px rgba(0, 188, 212, 0.5);
+z-index: 999;
+}
+#current-channel-name{
+margin-bottom:5px;
+font-size:0.9em;
+font-weight:bold;
+color:var(--primary-color);
+}
+#player{
+width:100%;
+height:180px;
+border-radius:12px;
+background:black;
+}
+
+#radio-container{
+position:relative;
+width:90%;
+max-width:850px;
+margin:20px auto;
+padding:10px;
+border-radius:18px;
+border:3px solid var(--primary-color);
+background:linear-gradient(145deg, var(--card-dark), var(--background-dark));
+box-shadow:0 0 25px rgba(0, 188, 212, 0.5);
+}
+#current-radio-name{
+margin-bottom:10px;
+font-size:1.2em;
+font-weight:bold;
+color:var(--primary-color);
+}
+#radio-player{
+width:100%;
+height:50px;
+border-radius:12px;
+background:var(--card-dark);
+}
+
+.channels, .radios, .xtream-list {
+display:grid;
+grid-template-columns:repeat(auto-fill, minmax(70px, 1fr));
+gap:10px;
+justify-items:center;
+margin:20px auto;
+max-width:1200px;
+}
+
+/* تنسيق جديد لقائمة الأكواد */
+.xtream-list {
+display: flex;
+flex-direction: column;
+gap: 15px;
+align-items: center;
+}
+.xtream-item {
+background: var(--card-dark);
+padding: 15px;
+border-radius: 12px;
+border: 1px solid var(--border-color);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+width: 90%;
+max-width: 600px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.xtream-item h3 {
+margin: 0;
+color: var(--primary-color);
+font-size: 1.2em;
+}
+.xtream-item .code-container {
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 10px;
+}
+.xtream-item pre {
+background: #0d0d1e;
+color: #e0e0e0;
+padding: 10px;
+border-radius: 8px;
+overflow-x: auto;
+flex-grow: 1;
+margin: 0;
+font-family: monospace;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+.xtream-item button {
+background: var(--primary-color);
+color: #fff;
+border: none;
+padding: 8px 12px;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.9em;
+font-weight: bold;
+transition: background-color 0.3s;
+}
+.xtream-item button:hover {
+background: #0097a7;
+}
+
+.channel-container, .radio-container{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+transition:transform 0.3s;
+background:var(--card-dark);
+padding:5px;
+border-radius:12px;
+border:1px solid var(--border-color);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.channel-container:hover, .radio-container:hover{
+transform:scale(1.05);
+background:#33334d;
+box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+.channel-icon, .radio-icon{
+width:50px;
+height:50px;
+border-radius:12px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 3px 8px rgba(255,255,255,0.2);
+transition:0.3s;
+background:var(--background-dark);
+}
+.channel-icon img, .radio-icon img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.channel-icon:hover, .radio-icon:hover{
+transform:scale(1.15);
+box-shadow:0 0 15px rgba(255,255,255,0.5),0 0 25px rgba(0, 188, 212, 0.4);
+}
+.channel-name, .radio-name{
+font-weight:bold;
+font-size:0.8em;
+color: var(--text-light);
+}
+
+/* الألوان الجديدة للقنوات /
+.ka-sport-1-10 .channel-name {
+color: #ffc107; / أصفر */
+}
+
+.ka-sport-11-26 .channel-name {
+color: #4caf50; /* أخضر */
+}
+
+.ka-sport-27-42 .channel-name {
+color: #212121; /* أسود */
+}
+
+.sources{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:5px;
+margin-top:5px;
+}
+.sources button{
+background:#ff0066;
+border:none;
+color:#fff;
+padding:5px 8px;
+border-radius:6px;
+cursor:pointer;
+font-size:0.8em;
+font-weight: bold;
+}
+.sources button:hover{
+background:#ff3399;
+}
+.sources button.active {
+background: #ff9800;
+box-shadow: 0 0 10px #ff9800;
+}
+
+.footer{
+margin:20px 0;
+font-size:1em;
+color:#aaa;
+}
+.footer a{
+color:#00bfff;
+text-decoration:none;
+font-weight:bold;
+}
+.footer a:hover{
+color:#1e90ff;
+}
+body.light {
+background:#f5f5f5;
+color:#111;
+}
+body.light #player-container, body.light #radio-container {
+background:linear-gradient(145deg,#fff,#ddd);
+border-color:#ff9800;
+}
+body.light .channel-container, body.light .radio-container{
+background:#eee;
+border-color:#ccc;
+}
+body.light .channel-icon{
+box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+body.light .channel-icon:hover{
+transform:scale(1.15);
+box-shadow:0 0 15px rgba(0,0,0,0.5),0 0 25px rgba(255,87,34,0.4);
+}
+
+.player-controls {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 100%;
+display: flex;
+justify-content: space-between;
+padding: 0 10px;
+box-sizing: border-box;
+}
+.player-controls button {
+background: rgba(0, 0, 0, 0.5);
+border: none;
+color: white;
+font-size: 1.5em; /* تصغير حجم الخط /
+width: 40px; / تحديد عرض أصغر /
+height: 40px; / تحديد ارتفاع أصغر /
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+border-radius: 50%; / جعلها دائرية */
+opacity: 0.8;
+transition: opacity 0.3s;
+}
+.player-controls button:hover {
+opacity: 1;
+}
+
+#player-container .fullscreen-btn {
+position: absolute;
+bottom: 10px; /* تم تعديل الموقع ليصبح أقرب لأسفل المشغل /
+right: 10px; / تم تعديل الموقع ليصبح أقرب ليمين المشغل */
+background: rgba(0, 0, 0, 0.5);
+color: white;
+border: none;
+padding: 8px 12px;
+border-radius: 6px;
+font-size: 1.5em;
+cursor: pointer;
+z-index: 10;
+}
+#player-container .fullscreen-btn:hover {
+background: rgba(0, 0, 0, 0.7);
+}
+
+</style>  
+</head>  
+<body>  <header>  
+  <div class="menu-items">  
+    <a href="#" onclick="showSectionAndScroll('channels')">القنوات⚽📺🔴🔴</a>  
+    <a href="#" onclick="showSectionAndScroll('radios')">الصوتيات 🎤⚽🟣🟣</a>  
+    <a href="#" onclick="showSectionAndScroll('xtream')">أكواد IPTV 🔑مجانيه اصغط🟢🟢</a>  
+    <a href="https://t.me/alilivetv12/254" target="_blank">حمل مشغل القنوات📺✅🔵🔵</a>  
+    <a href="https://t.me/alialiah123456" target="_blank">معلومات/تواصل🟤🟤</a>  
+  </div>  
+</header>  <div id="channels-section">  
+  <div id="player-container">  
+    <div id="current-channel-name"></div>  
+    <video id="player" controls autoplay poster="https://llaaddzz.neocities.org/IMG_20250824_015628_776.jpg"></video>  
+    <div class="player-controls">  
+      <button onclick="changeChannel(-1)">➡️➡️</button>  
+      <button onclick="changeChannel(1)">⬅️⬅️</button>  
+    </div>  
+    <div id="quality-bar" class="sources"></div>  
+    <button onclick="toggleFullscreen()" class="fullscreen-btn">⛶</button>  
+  </div>  
+  <div class="channels" id="channels-container"></div>  
+  
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="https://t.me/alilivetv12/279" target="_blank">
+      <img src="https://llaaddzz.neocities.org/Picsart_25-08-25_20-04-43-250.jpg" alt="رابط قناة التلغرام" style="width: 90%; max-width: 850px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+    </a>
   </div>
+
+</div>  <div id="radios-section" style="display: none;">  
+  <div class="section-title">🎧 الصوتيات</div>  
+  <div id="radio-container">  
+    <div id="current-radio-name"></div>  
+    <audio id="radio-player" controls></audio>  
+    <div id="radio-quality-bar" class="sources"></div>  
+  </div>  
+  <div class="radios" id="radios-container"></div>  
+</div>  
+
+<div id="xtream-section" style="display: none;">
+    <div class="section-title">🔑 أكواد اكستريم / IPTV</div>
+    <div id="xtream-container" class="xtream-list"></div>
 </div>
 
-<footer>
-  حقوق القناة: <a href="https://t.me/alialiah123456" target="_blank">Telegram Channel</a>
-</footer>
+<div class="footer">  
+جميع الحقوق محفوظة © <a href="https://t.me/alialiah123456" target="_blank">قناة التلي</a>  
+</div>  <script>  
+const logos = {  
+  "القرآن الكريم":"https://llaaddzz.neocities.org/images.jpeg",  
+  "default":"https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg",  
+  "radio":"https://llaaddzz.neocities.org/FB_IMG_1755648020069.jpg"  
+};  
+  
+const channels=[  
+  // قناة القرآن الكريم  
+  {name:'القرآن الكريم', logo:'https://llaaddzz.neocities.org/images.jpeg', urls:['https://qurango.net/radio/ahmad_alajmy']},  
+  // قنوات ka-sport 1-10  
+  {name:'ka-sport 1', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://balance.footballii.ir/hls2/b1.m3u8', 'https://wo.cma.footballii.ir/hls2/b1.m3u8', 'https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/10934.m3u8', 'https://wo.cma.footballii.ir/hls2/b1_src.m3u8', 'http://176.119.29.54/bb1a4119-65f9-40dc-9867-127f2a6973d1.m3u8?md5=28P02QtEr-WobDz_Tv8I6g&expires=1756575724', 'http://xtream-ie.org:80/live/yusf4k/yusf4k/44324.ts', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1021.m3u8', 'http://iptv-premium-ott.com:8789/live/GHU63295/CFM90315/13682.ts', 'https://stream.veo.buzz:6072/sport/ch1/ch1_720.m3u8', 'http://iptv-premium-ott.com:8789/live/GHU63295/CFM90315/332390.ts', 'https://edge17.620097.ir.cdn.ir:443/hls2/b1_high.m3u8', 'http://het119a.4rouwanda-shop.store/live/918454578001/index.m3u8']},   
+  {name:'ka-sport 2', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://dk.wo.footballii.ir:443/hls2/b2_low.m3u8','https://dk.wo.footballii.ir:443/hls2/b2_high.m3u8', 'http://bdd00.4rouwanda-shop.store/live/69854211/index.m3u8?t=q04vlmPbEVvLtw8vR3RKUQ&e=1755847438', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/1022.m3u8', 'https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8', 'http://extraott-iptv.com:88/live/0229477349/8104258135/165652.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4400', 'http://sansat.cc:88/live/02025033583654/1680219086/852919.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'https://koragoal.onrender.com/fetch/?url=http://cdntv.online/low/9mlxywika2/55.m3u8', 'https://stream.veo.buzz:6073/sport/ch2/ch2_720.m3u8']},   
+  {name:'ka-sport 3', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://edge19.620097.ir.cdn.ir/hls2/b3.m3u8', 'https://wo.cma.footballii.ir/hls2/b3_high.m3u8', 'https://stream.supertv.gg:3003/supertv/sport/stv3/ch3/ch3_1080.m3u8', 'http://sansat.cc:88/live/02025033583654/1680219086/852922.ts', 'https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', 'https://stream2.removie.raha.af:443/live/smil:lemartv.smil/chunklist_w1519371652_b1500000.m3u8', 'https://stream.veo.buzz:6074/sport/ch3/ch3_720.m3u8', 'http://iptv-premium-ott.com:8789/live/GHU63295/CFM90315/332388.ts', 'http://stream.mytvplus.net:7002/sport/ch1/ch1_1080.m3u8', 'http://stream.mytvplus.net:7002/sport/ch1/ch1_720.m3u8']},  
+  {name:'ka-sport 4', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['http://bdd00.4rouwanda-shop.store/live/0103088447/index.m3u8?t=-aOgdueF6oK_RbG5R7W1oQ&e=1755856413', 'https://stream.supertv.gg:3004/supertv/sport/stv4/ch4/ch4_720.m3u8', 'http://ugeen.live:8080/Ugeen_VIP6nHipS/jPjqCE/4402', 'http://sansat.cc:88/live/02025033583654/1680219086/852916.ts', 'http://www.teledunet.com:8080/tdn/tdn/19959464.m3u8', 'http://max.amigo00.com:2052/live/18631050917737/12212856565617/602828.m3u8', 'https://osoukr.7380990745.xyz:8443/hls/jpe9zodoh.m3u8?s=S_n5wMLhd14FZooR6LQTyw&e=1756251008', '', '']},  
+  {name:'ka-sport 5', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_360.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_720.m3u8', 'https://stream.supertv.gg:3005/supertv/sport/stv5/ch5/ch5_1080.m3u8', 'http://off23.lynxcontents.click:2086/push/227994294583/zA3neX1MIR/67392?expires=1756607933&token=gqx_QN9xzy_RTjzV43rV-DbADN6nxZZtNyhNANfHE50-HDWHqKHV-ABDoEHsQMno_7TqDqaVQX9XWdsRdJRm3do2ccH8amLS5ZY9AT1LC4Y77f7_QCHjWwY7hbE6bb6qP9CjZHnX7G49fQgq0x8N6Emf_jWzbyheyVF6T-v7U9AlAKPF1hM8LggW1OR-LetRUS9NNqRj7NpN1wEOyRfnU9NT4Ci1JBh9tTA5Stvh477Qwv7mVwXmXGA-CVb6AEI8', '']},  
+  {name:'ka-sport 6', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_360.m3u8', 'https://a10.bein-match.tech/broadcast/7VZ7b8WlQJlgYCMJma9ZhQ/1756231750/1756231496/1/bein6.m3u8', 'https://stream.supertv.gg:3006/supertv/sport/stv6/ch6/ch6_1080.m3u8', 'http://082dd340.amazzin.pw/iptv/GGP3ZAYPXGWHWL/7270/index.m3u8', 'http://082dd340.amazzin.pw/iptv/GGP3ZAYPXGWHWL/7271/index.m3u8', 'http://082dd340.amazzin.pw/iptv/GGP3ZAYPXGWHWL/7272/index.m3u8',, 'http://082dd340.amazzin.pw/iptv/GGP3ZAYPXGWHWL/7273/index.m3u',, '',, '',]},  
+  {name:'ka-sport 7', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_360.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_720.m3u8', 'https://stream.supertv.gg:3007/supertv/sport/stv7/ch7/ch7_1080.m3u8', '',]},
+  {name:'ka-sport 8', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_360.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_720.m3u8', 'https://stream.supertv.gg:3008/supertv/sport/stv8/ch8/ch8_1080.m3u8', 'http://tviboplay.com/live/757697103397485/1593574628/121940.ts', '']},  
+  {name:'ka-sport 9', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_360.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_720.m3u8', 'https://stream.supertv.gg:3009/supertv/sport/stv9/ch9/ch9_1080.m3u8', 'https://edgestreams.pro/hls/ueyeztrazb4.m3u8?st=6oXa0QusaAi_BK64rwOmAoULsgOOjTdyHl55B0MHbS4&e=1756054214', '']},  
+  {name:'ka-sport 10', logo:'https://llaaddzz.neocities.org/IMG_20250824_015213_723.jpg', urls:['https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_360.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_720.m3u8', 'https://stream.supertv.gg:3010/supertv/sport/stv10/ch10/ch10_1080.m3u8', 'https://xreynoltrikam.sbs:443/kooora/3ees62fd80dd3bei11_360p?ts=1756043034&nonce=15Kwx7e&token=535201610', 'https://xreynoltrikam.sbs:443/kooora/3ees62fd80dd3bei11_hd?ts=1756043034&nonce=15Kwx7e&token=28938324']}
+];  
+  
+const container=document.getElementById('channels-container');  
+const qualityBar=document.getElementById('quality-bar');  
+const video=document.getElementById('player');  
+const channelNameDisplay=document.getElementById('current-channel-name');  
+const channelsSection = document.getElementById('channels-section');  
+const radiosSection = document.getElementById('radios-section');  
+const xtreamSection = document.getElementById('xtream-section');
+const xtreamContainer = document.getElementById('xtream-container');
 
-<!-- عداد زيارات مخفي -->
+// ====== أكواد IPTV الجديدة والمحدثة ======
+// يمكنك تعديل هذه القائمة أو إضافة أكواد جديدة هنا
+const xtreamCodes = [
+  { name: 'سيرفر شامنا', code: 'http://narab.live:2082/get.php?username=ahmad123&password=112233&type=m3u_plus&output=ts' },
+  { name: 'سيرفر اكستريم Atlaspro', code: 'http://line.atlaspro4k.me/get.php?username=0fd90cc2d7&password=7ad1d828cc7f&type=m3u_plus&output=ts' },
+  { name: 'سيرفر BLUE 4K', code: 'http://etihadtv.live:8080/get.php?username=osamahallani&password=9192529&type=m3u_plus&output=ts' },
+  { name: 'سيرفر الاتحاد', code: 'http://4z4.xyz:8080/get.php?username=rashad1alawadi&password=0046707531082aswe1&type=m3u_plus&output=hls' },
+  { name: 'سيرفر Zain', code: 'http://live.remorize.live:2082/get.php?username=mansouri&password=4hERcVkAtYcq&type=m3u_plus&output=ts' },
+  { name: 'كود slyip.tv', code: 'http://slyip.tv/get.php?username=4668241086179314&password=4668241086179314&type=m3u_plus&output=ts' },
+  { name: 'كود rfye55.xyz', code: 'http://rfye55.xyz:80/get.php?username=51GYZ3Q&password=G0N5T14&type=m3u_plus&output=ts' },
+  { name: 'كود Ardalan Rawanduze', code: 'http://p1.proiptv.co:88/get.php?username=R87646765&password=PCBF1LZFVGKXGZ4&type=m3u_plus' },
+  { name: 'كود dream4k.co (1)', code: 'http://dream4k.co:80/get.php?username=tni5znb1y3&password=q2lspqsb3i' },
+  { name: 'كود dream4k.co (2)', code: 'http://dream4k.co:80/get.php?username=3821836150904941&password=3cpvazya3j' },
+  { name: 'كود dream4k.co (3)', code: 'http://dream4k.co:8080/get.php?username=zv9uxorwdgh&password=gqpb3w3rhb' },
+  { name: 'كود oscartvland.tv', code: 'https://oscartvland.tv:80/get.php?username=ahmed123456789&password=123456789ahmed&type=m3u_plus' },
+  { name: 'كود tera4k.com', code: 'https://tera4k.com:8880/get.php?username=arab1one2aa22225&password=37032122927373&type=m3u_plus&output=ts' },
+  { name: 'سيرفر Beno 4K', code: 'http://beno4k.live:8080/get.php?username=123&password=123&type=m3u&output=ts' },
+  { name: 'سيرفر فوريفير العربي (1)', code: 'http://forevertv.me:2095/get.php?username=5599008877&password=lWp30tsbALrPOX&type=m3u&output=mpegts' },
+  { name: 'سيرفر فوريفير العربي (2)', code: 'http://forevertv.me:8080/get.php?username=1234578&password=Wq6wdahq497563&type=m3u_plus' },
+  { name: 'سيرفر سان سات SANSAT', code: 'http://sansat.cc:88/get.php?username=02025033583654&password=1680219086&type=m3u_plus' },
+  { name: 'كود istarpro.xyz (1)', code: 'http://istarpro.xyz:80/get.php?username=27593709031&password=4598009720&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (2)', code: 'http://istarpro.xyz:80/get.php?username=209711078134&password=66d48a0271709.25642&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (3)', code: 'http://istarpro.xyz:80/get.php?username=570027537&password=31247988&type=m3u_plus&output=ts' },
+  { name: 'كود istarpro.xyz (4)', code: 'http://istarpro.xyz:80/get.php?username=315167184510&password=66d4b179f1153.29010&type=m3u_plus&output=ts' },
+  { name: 'سيرفر 4k preimum', code: 'http://casper181.com/get.php?username=798204420350&password=223180302424&type=m3u_plus&output=ts' },
+  // هنا تبدأ الأكواد الجديدة التي يمكنك إضافتها يدوياً
+  { name: 'سيرفر جديد', code: '' }, // هذا هو السيرفر الثابت
+  { name: 'سيرفر جديد 1', code: 'http://o99.link:2082/get.php?username=samir.altimawi&password=7333359564&type=m3u_plus' },
+  { name: 'سيرفر جديد 2', code: 'http://royalibox.com/get.php?username=mounir_193977&password=9OnwsiJg&type=m3u_plus' }
+];
+
+// وظيفة لنسخ الكود إلى الحافظة
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('تم نسخ الكود!');
+  } catch (err) {
+    console.error('فشل في النسخ:', err);
+    alert('فشل في نسخ الكود.');
+  }
+}
+
+// وظيفة لعرض الأكواد في الصفحة
+function renderXtreamCodes() {
+    xtreamContainer.innerHTML = ''; // تنظيف المحتوى القديم
+    xtreamCodes.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'xtream-item';
+        div.innerHTML = `
+            <h3>${item.name}</h3>
+            <div class="code-container">
+                <pre>${item.code}</pre>
+                <button onclick="copyToClipboard('${item.code}')">نسخ</button>
+            </div>
+        `;
+        xtreamContainer.appendChild(div);
+    });
+}
+// ====== نهاية أكواد IPTV ======
+
+
+channels.forEach((ch,i)=>{  
+  const div=document.createElement('div');  
+  div.className='channel-container';  
+  
+  // إضافة الكلاس بناءً على رقم القناة  
+  if (i >= 1 && i <= 10) {  
+      div.classList.add('ka-sport-1-10');  
+  } else if (i >= 11 && i <= 26) {  
+      div.classList.add('ka-sport-11-26');  
+  } else if (i >= 27 && i <= 42) {  
+      div.classList.add('ka-sport-27-42');  
+  }  
+  
+  const logoSrc = ch.logo || logos.default; /* تم تعديل هذا السطر لاستخدام الخاصية الجديدة */
+  div.innerHTML=`<div class="channel-icon" onclick="playChannel(${i})" title="${ch.name}"><img src="${logoSrc}" alt="${ch.name}"></div><div class="channel-name">${ch.name}</div>`;  
+  container.appendChild(div);  
+});  
+  
+let currentChannel=0;  
+function updateQualityButtons(channelIndex){  
+  qualityBar.innerHTML='';  
+  const channelUrls = channels[channelIndex].urls;  
+  const qualities = ['360p', '720p', '1080p', '1080p', '4k']; // تم تحديث هذه القائمة لتكون 5 خيارات  
+  channelUrls.forEach((url, j) => {  
+    if (url) {  
+      const btn = document.createElement('button');  
+      if (channelIndex === 0) { // للقناة الأولى (القرآن الكريم)  
+        btn.textContent = `صوت فقط`;  
+      } else {  
+        // إذا كان هناك رابط في الكود، استخدمه، وإلا استخدم النص الافتراضي  
+        if (j === 0) {  
+          btn.textContent = 'مصدر1';  
+        } else if (j === 1) {  
+          btn.textContent = 'مصدر2';  
+        } else if (j === 2) {  
+          btn.textContent = 'مصدر 3';  
+        } else {  
+          btn.textContent = `مصدر ${j + 1}`;  
+        }  
+      }  
+      btn.className = 'quality-btn';  
+      if (j === 0) btn.classList.add('active');  
+      btn.onclick = () => {  
+        video.src = url;  
+        video.play();  
+        document.querySelectorAll('#quality-bar .quality-btn').forEach(b => b.classList.remove('active'));  
+        btn.classList.add('active');  
+      };  
+      qualityBar.appendChild(btn);  
+    }  
+  });  
+}  
+  
+function playChannel(index){  
+  currentChannel=index;  
+  video.src=channels[index].urls[0];  
+  video.play();  
+  updateQualityButtons(index);  
+  channelNameDisplay.textContent=channels[index].name;  
+  
+  // إظهار المشغل عند الضغط على القناة  
+  const playerContainer = document.getElementById('player-container');  
+  playerContainer.style.display = 'block';  
+  // التمرير التلقائي إلى المشغل بعد الضغط  
+  playerContainer.scrollIntoView({ behavior: 'smooth' });  
+  
+  // التحكم في الصورة الظاهرة في المشغل  
+  if (channels[index].name === 'القرآن الكريم') {  
+      video.poster = 'https://llaaddzz.neocities.org/IMG_20250824_015628_776.jpg';  
+  } else {  
+      video.poster = 'https://llaaddzz.neocities.org/IMG_20250824_015628_776.jpg'; // إظهار الصورة التي طلبتها  
+  }  
+}  
+  
+function changeChannel(direction) {  
+  currentChannel += direction;  
+  if (currentChannel < 0) {  
+    currentChannel = channels.length - 1;  
+  } else if (currentChannel >= channels.length) {  
+    currentChannel = 0;  
+  }  
+  playChannel(currentChannel);  
+}  
+  
+// ====== الراديو ======  
+const radios=[  
+{name:'live 1', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm/1M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm/1L'},  
+{name:'live 2', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_2/2L'},  
+{name:'live 3', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_3/3L'},  
+{name:'live 4', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_4/4L'},  
+{name:'live 5', strong:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5M', weak:'https://cdn.anisfm.pp.ua/listen/anis_fm_5/5L'}  
+];  
+  
+const radioContainer=document.getElementById('radios-container');  
+const radioPlayer=document.getElementById('radio-player');  
+const radioNameDisplay=document.getElementById('current-radio-name');  
+const radioQualityBar=document.getElementById('radio-quality-bar');  
+  
+radios.forEach((r,i)=>{  
+  const div=document.createElement('div');  
+  div.className='radio-container';  
+  div.innerHTML=`<div class="radio-icon" onclick="playRadio(${i},'strong')" title="${r.name}"><img src="${logos.radio}" alt="${r.name}"></div><div class="radio-name">${r.name}</div>`;  
+  radioContainer.appendChild(div);  
+});  
+  
+function playRadio(index, quality){  
+  radioPlayer.src = radios[index][quality];  
+  radioPlayer.play();  
+  radioNameDisplay.textContent = radios[index].name + ' - ' + (quality==='strong' ? 'نت قوي' : 'نت ضعيف');  
+  updateRadioQualityButtons(index, quality);  
+  document.getElementById('radio-container').style.display = 'block';  
+  document.getElementById('player-container').style.display = 'none';  
+}  
+  
+function updateRadioQualityButtons(index,currentQuality){  
+  radioQualityBar.innerHTML='';  
+  ['strong','weak'].forEach(q=>{  
+    const btn=document.createElement('button');  
+    btn.textContent = q==='strong'?'نت قوي':'نت ضعيف';  
+    btn.className='quality-btn';  
+    if(q===currentQuality) btn.classList.add('active');  
+    btn.onclick=()=>{ playRadio(index,q); };  
+    radioQualityBar.appendChild(btn);  
+  });  
+}  
+  
+function showSection(section){  
+  // إخفاء جميع الأقسام
+  channelsSection.style.display = 'none';  
+  radiosSection.style.display = 'none';  
+  xtreamSection.style.display = 'none';
+
+  // إيقاف تشغيل الفيديو والصوتيات
+  video.pause();
+  radioPlayer.pause();
+
+  // إظهار القسم المطلوب
+  if(section==='channels'){  
+    channelsSection.style.display = 'block';  
+  } else if (section === 'radios') {
+    radiosSection.style.display = 'block';
+  } else if (section === 'xtream') {
+    xtreamSection.style.display = 'block';
+    renderXtreamCodes();
+  }
+}  
+  
+function showSectionAndScroll(section) {  
+  showSection(section);  
+  window.scrollTo({ top: 0, behavior: 'smooth' });  
+}  
+  
+function toggleTheme(){ document.body.classList.toggle('light'); }  
+  
+window.addEventListener('load',()=>{  
+});  
+  
+// وظائف التحكم الجديدة  
+function rewindStream() {  
+  if (video.currentTime > 60) {  
+    video.currentTime -= 60;  
+  } else {  
+    video.currentTime = 0;  
+  }  
+}  
+function jumpToLive() {  
+  video.currentTime = video.duration;  
+}  
+  
+// إضافة زر ملء الشاشة  
+video.addEventListener('dblclick', toggleFullscreen);  
+  
+function toggleFullscreen() {  
+  if (document.fullscreenElement) {  
+    document.exitFullscreen();  
+  } else {  
+    video.requestFullscreen();  
+  }  
+}  
+  
+</script>  
 <script type="text/javascript">
 var sc_project=13157668; 
-var sc_invisible=1;  
+var sc_invisible=0; 
 var sc_security="e22a1f62"; 
 var scJsHost = "https://";
 document.write("<sc"+"ript type='text/javascript' src='" +
 scJsHost+
 "statcounter.com/counter/counter.js'></"+"script>");
 </script>
-
-<script>
-// كل مباراة تحدد هنا مع 10 روابط وهمية جاهزة للتعديل
-const matches = [
-  { 
-    team1: "مان سيتي", 
-    team2: "برايتون",
-    servers: [
-      "https://wo.cma.footballii.ir/hls2/b1_high.m3u8",
-      "https://wo.cma.footballii.ir/hls2/b1.m3u8",
-      "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8",
-      "https://cdn.karwan.tv/nrt-sport/tracks-v1a1/mono.m3u8",
-      "https://fakeurl.com/match1/server5.m3u8",
-      "https://fakeurl.com/match1/server6.m3u8",
-      "https://fakeurl.com/match1/server7.m3u8",
-      "https://fakeurl.com/match1/server8.m3u8",
-      "https://fakeurl.com/match1/server9.m3u8",
-      "https://fakeurl.com/match1/server10.m3u8"
-    ]
-  },
-  { 
-    team1: "ويستهام", 
-    team2: "نوتينغهام",
-    servers: [
-      "https://wo.cma.footballii.ir:443/hls2/b2_low.m3u8",
-      "https://wo.cma.footballii.ir:443/hls2/b2_src.m3u8",
-      "https://stream.supertv.gg:3002/supertv/sport/stv2/ch2/ch2_1080.m3u8",
-      "https://fakeurl.com/match2/server4.m3u8",
-      "https://fakeurl.com/match2/server5.m3u8",
-      "https://fakeurl.com/match2/server6.m3u8",
-      "https://fakeurl.com/match2/server7.m3u8",
-      "https://fakeurl.com/match2/server8.m3u8",
-      "https://fakeurl.com/match2/server9.m3u8",
-      "https://fakeurl.com/match2/server10.m3u8"
-    ]
-  },
-  { 
-    team1: "", 
-    team2: "",
-    servers: [
-      "https://fakeurl.com/match3/server1.m3u8",
-      "https://fakeurl.com/match3/server2.m3u8",
-      "https://fakeurl.com/match3/server3.m3u8",
-      "https://fakeurl.com/match3/server4.m3u8",
-      "https://fakeurl.com/match3/server5.m3u8",
-      "https://fakeurl.com/match3/server6.m3u8",
-      "https://fakeurl.com/match3/server7.m3u8",
-      "https://fakeurl.com/match3/server8.m3u8",
-      "https://fakeurl.com/match3/server9.m3u8",
-      "https://fakeurl.com/match3/server10.m3u8"
-    ]
-  }
-];
+</body>  
+</html>];
 
 const colors = ["#0d47a1","#880e4f","#1b5e20","#f57f17","#6a1b9a","#c62828","#0277bd","#ef6c00"];
 
