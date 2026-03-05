@@ -2,91 +2,169 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>ORANGE STORE Sport</title>
-
+<title>ORANGE STORE IPTV</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 <style>
 body{
-background:#0b0b0b;
-color:white;
-font-family:Arial;
-text-align:center;
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0b0b0b;
+    color:white;
 }
-
-h1{
-color:orange;
+header{
+    background:#111;
+    padding:20px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    color:#ff8800;
+    box-shadow:0 0 10px black;
 }
-
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:20px;
+}
+section{
+    background:#111;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:12px;
+    box-shadow:0 0 15px #222;
+}
+h2{
+    color:#ff8800;
+}
+ul{
+    list-style:none;
+    padding:0;
+}
+ul li{
+    padding:8px 0;
+}
+.contact button{
+    background:#ff8800;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    margin:8px;
+    transition:0.3s;
+}
+.contact button:hover{
+    background:#ff6600;
+    transform:scale(1.05);
+}
+footer{
+    text-align:center;
+    padding:15px;
+    background:#111;
+    color:#aaa;
+    margin-top:20px;
+}
 .player{
-width:80%;
-margin:auto;
+    width:100%;
+    margin-bottom:20px;
 }
-
 video{
-width:100%;
-border:3px solid orange;
-border-radius:10px;
+    width:100%;
+    border-radius:12px;
+    border:3px solid #ff8800;
+    box-shadow:0 0 15px #ff8800;
 }
-
 .channels{
-margin-top:20px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
 }
-
-button{
-padding:10px 20px;
-margin:5px;
-border:none;
-border-radius:8px;
-background:orange;
-color:black;
-font-weight:bold;
-cursor:pointer;
+.channels button{
+    background:#ff8800;
+    border:none;
+    padding:10px 20px;
+    margin:5px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+.channels button:hover{
+    background:#ff6600;
+    transform:scale(1.05);
 }
 </style>
 </head>
-
 <body>
 
-<h1>ORANGE STORE Sport</h1>
+<header>🟠 ORANGE STORE IPTV</header>
 
-<div class="player">
+<div class="container">
+
+<section class="player">
 <video id="video" controls autoplay></video>
+<div class="channels">
+<button onclick="playChannel(1)">ORANGE SPORT 1</button>
+<button onclick="playChannel(2)">ORANGE SPORT 2</button>
+<button onclick="playChannel(3)">ORANGE SPORT 3</button>
+</div>
+</section>
+
+<section>
+<h2>🎬 أقوى العروض</h2>
+<p>استمتع بمشاهدة أكثر من 7,000 قناة عربية وعالمية، بالإضافة إلى أضخم مكتبة للأفلام والمسلسلات بجودة 4K UHD.</p>
+</section>
+
+<section>
+<h2>💰 قائمة الأسعار</h2>
+<ul>
+<li>اشتراك شهر: 5,000 د.ع</li>
+<li>اشتراك 3 أشهر: 10,000 د.ع</li>
+<li>اشتراك 6 أشهر: 16,000 د.ع</li>
+<li>اشتراك سنة كاملة: 22,000 د.ع ⭐</li>
+</ul>
+</section>
+
+<section>
+<h2>⚠️ ملاحظات هامة</h2>
+<ul>
+<li>يدعم شاشات Samsung و LG (ابحث عن كلمة Max في المتجر).</li>
+<li>يدعم جميع أجهزة الأندرويد والايفون.</li>
+<li>الاشتراك لا يعمل على إنترنت الأبراج.</li>
+</ul>
+</section>
+
+<section class="contact">
+<h2>📞 للتفعيل الفوري</h2>
+<button onclick="window.open('https://wa.me/9647861627548','_blank')">واتساب</button>
+<button onclick="window.open('https://t.me/a10_46','_blank')">تليجرام</button>
+</section>
+
 </div>
 
-<div class="channels">
-<button onclick="playChannel(1)">ORANGE STORE sport 1</button>
-<button onclick="playChannel(2)">ORANGE STORE sport 2</button>
-<button onclick="playChannel(3)">ORANGE STORE sport 3</button>
-</div>
+<footer>👑 ORANGE STORE</footer>
 
 <script>
-
 var channels = {
-1: "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8",
-2: "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8",
-3: "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8"
+1:"http://135.125.109.73:9000/beinsport1_.m3u8",
+2:"https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8",
+3:"https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8"
 };
 
 function playChannel(num){
-
-var video = document.getElementById("video");
-var src = channels[num];
-
-if(Hls.isSupported()){
-var hls = new Hls();
-hls.loadSource(src);
-hls.attachMedia(video);
-}
-
-else if(video.canPlayType('application/vnd.apple.mpegurl')){
-video.src = src;
-}
-
+    var video=document.getElementById("video");
+    var src=channels[num];
+    if(Hls.isSupported()){
+        var hls=new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+    } else if(video.canPlayType('application/vnd.apple.mpegurl')){
+        video.src=src;
+    }
 }
 
 playChannel(1);
-
 </script>
 
 </body>
