@@ -59,7 +59,7 @@
         /* --- الهيدر والشعار المربع --- */
         header {
             background: linear-gradient(180deg, #1a1a1a 0%, var(--dark-bg) 100%);
-            padding: 40px 10px;
+            padding: 80px 40px;
             text-align: center;
             border-bottom: 2px solid var(--orange);
         }
@@ -144,7 +144,10 @@
             display: block;
         }
 
+        /* قائمة القنوات مع خاصية التمرير لسهولة التصفح */
         .channels-grid {
+            max-height: 400px; /* تحديد طول القائمة */
+            overflow-y: auto;
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
@@ -154,6 +157,10 @@
             border-radius: 0 0 15px 15px;
             margin-bottom: 30px;
         }
+
+        /* تحسين شكل شريط التمرير (Scrollbar) */
+        .channels-grid::-webkit-scrollbar { width: 5px; }
+        .channels-grid::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 10px; }
 
         .channels-grid button {
             background: #222;
@@ -168,12 +175,21 @@
             align-items: center;
             gap: 15px;
             transition: 0.3s;
+            text-align: right;
         }
 
         .channels-grid button.active {
             background: var(--orange);
             color: black;
             border-color: white;
+        }
+
+        .ch-num {
+            background: rgba(255, 140, 0, 0.2);
+            color: var(--orange);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
         }
 
         /* --- بطاقة الأسعار والمعلومات --- */
@@ -224,11 +240,10 @@
 <div class="ticker-wrap">
     <div class="ticker-move">
         <span>🎬 أقوى عروض متجر ORANGE STORE 🎬</span>
-        <span>🔥 أكثر من 7,000 قناة عربية وعالمية بجودة 4K UHD 🔥</span>
+        <span>🔥 تم إضافة قنوات BeIN Sports لمتابعة أقوى المباريات 🔥</span>
         <span>💰 الأسعار: شهر بـ 5 آلاف | 3 أشهر بـ 10 آلاف | 6 أشهر بـ 16 ألف | سنة كاملة بـ 22 ألف ⭐</span>
-        <span>📺 يدعم شاشات Samsung و LG (تطبيق Max) وكافة الأجهزة 📺</span>
-        <span>📞 للتفعيل الفوري تواصل معنا عبر الواتساب أو التليجرام 📞</span>
-        <span>👑 الجودة والثبات تجدونها فقط في ORANGE STORE 👑</span>
+        <span>📺 يدعم شاشات Samsung و LG وكافة أجهزة الأندرويد والايفون 📺</span>
+        <span>📞 هذا  البث محدود ومجاني اشترك  لمشاهدة الافضل📞</span>
     </div>
 </div>
 
@@ -237,7 +252,7 @@
     <div class="site-title">ORANGE STORE IPTV</div>
 
     <div class="top-contact">
-        <span class="contact-label">للاشتراك تواصل معنا:</span>
+        <span class="contact-label">لمشاهدة القنوات بجودة عالية اشترك معنا:</span>
         <div class="contact-btns-top">
             <a href="https://wa.me/9647861627548" class="btn-top wa-top" target="_blank">واتساب</a>
             <a href="https://t.me/a10_46" class="btn-top tg-top" target="_blank">تليجرام</a>
@@ -252,14 +267,32 @@
     </div>
     
     <div class="channels-grid">
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', this)">
-            <span>📺</span> ORANGE SPORT 1
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport1_.m3u8', this)">
+            <span class="ch-num">1</span> BeIN Sports 1
         </button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', this)">
-            <span>📺</span> ORANGE SPORT 2
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport2_.m3u8', this)">
+            <span class="ch-num">2</span> BeIN Sports 2
         </button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', this)">
-            <span>📺</span> ORANGE SPORT 3
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport3_.m3u8', this)">
+            <span class="ch-num">3</span> BeIN Sports 3
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport4_.m3u8', this)">
+            <span class="ch-num">4</span> BeIN Sports 4
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport5_.m3u8', this)">
+            <span class="ch-num">5</span> BeIN Sports 5
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport6_.m3u8', this)">
+            <span class="ch-num">6</span> BeIN Sports 6
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport7_.m3u8', this)">
+            <span class="ch-num">7</span> BeIN Sports 7
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport8_.m3u8', this)">
+            <span class="ch-num">8</span> BeIN Sports 8
+        </button>
+        <button onclick="playChannel('http://135.125.109.73:9000/beinsport9_.m3u8', this)">
+            <span class="ch-num">9</span> BeIN Sports 9
         </button>
     </div>
 
@@ -313,8 +346,9 @@
         }
     }
 
+    // تشغيل القناة الأولى عند التحميل
     window.addEventListener('load', function(){
-        playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_1080.m3u8', document.querySelector('.channels-grid button'));
+        playChannel('http://135.125.109.73:9000/beinsport1_.m3u8', document.querySelector('.channels-grid button'));
     });
 </script>
 
