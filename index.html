@@ -3,49 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORANGE STORE | IPTV</title>
+    <title>ORANGE STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        :root { --orange: #ff8c00; --dark: #0a0a0a; --card: #151515; }
-        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; padding-bottom: 100px; overflow-x: hidden; }
-
-        /* شريط الإعلان */
-        .ticker { background: var(--orange); color: black; font-size: 13px; font-weight: 900; padding: 12px 0; overflow: hidden; position: sticky; top: 0; z-index: 1000; }
-        .ticker-move { display: inline-block; animation: move 35s linear infinite; white-space: nowrap; }
+        body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: white; margin: 0; text-align: center; padding-bottom: 100px; }
+        .ticker { background: #ff8c00; color: black; font-size: 13px; font-weight: 900; padding: 12px 0; overflow: hidden; position: sticky; top: 0; z-index: 1000; }
+        .ticker-move { display: inline-block; animation: move 30s linear infinite; white-space: nowrap; }
         @keyframes move { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         .ticker-move span { margin: 0 30px; }
-
         header { padding: 15px; border-bottom: 1px solid #222; }
-        .logo { width: 70px; height: 70px; border-radius: 15px; border: 2px solid var(--orange); box-shadow: 0 0 10px var(--orange); }
-        
+        .logo { width: 70px; height: 70px; border-radius: 15px; border: 2px solid #ff8c00; }
         .container { width: 95%; max-width: 650px; margin: auto; }
-
-        /* المشغل */
-        .player-box { background: #000; border: 2px solid var(--orange); border-radius: 15px; overflow: hidden; margin: 15px 0; box-shadow: 0 0 20px rgba(255,140,0,0.2); }
+        .player-box { background: #000; border: 2px solid #ff8c00; border-radius: 15px; overflow: hidden; margin: 15px 0; }
         video { width: 100%; aspect-ratio: 16/9; display: block; }
-        
-        /* بطاقات الأسعار */
-        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; padding: 0 5px; }
-        .price-card { background: var(--card); border: 1px solid #333; padding: 12px 2px; border-radius: 12px; position: relative; }
-        .price-card.popular { border-color: var(--orange); transform: scale(1.05); z-index: 1; box-shadow: 0 0 15px rgba(255,140,0,0.2); }
-        .price-card.popular::after { content: 'الأكثر طلباً'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--orange); color: black; font-size: 8px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .price-card { background: #151515; border: 1px solid #333; padding: 12px 2px; border-radius: 12px; position: relative; }
+        .price-card.popular { border-color: #ff8c00; transform: scale(1.05); }
         .price-card h3 { font-size: 11px; margin: 5px 0; color: #888; }
-        .price-card .cost { font-size: 15px; font-weight: 900; color: var(--orange); }
-        .price-card .per { font-size: 8px; color: #555; }
-
-        /* شبكة القنوات */
-        .channels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 10px; background: #111; border-radius: 12px; margin-bottom: 20px; }
-        .channels-grid button { background: #222; color: #fff; border: 1px solid #333; padding: 10px 0; border-radius: 6px; font-size: 9px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; transition: 0.2s; }
-        .channels-grid button.active { background: var(--orange); color: black; border-color: white; }
-
-        /* أزرار التواصل العائمة */
+        .price-card .cost { font-size: 15px; font-weight: 900; color: #ff8c00; }
+        .channels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 10px; background: #111; border-radius: 12px; }
+        .channels-grid button { background: #222; color: #fff; border: 1px solid #333; padding: 10px 0; border-radius: 6px; font-size: 9px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .channels-grid button.active { background: #ff8c00; color: black; }
         .float-contact { position: fixed; bottom: 15px; left: 10px; right: 10px; display: flex; gap: 10px; z-index: 9999; }
         .float-btn { flex: 1; padding: 12px; border-radius: 50px; text-decoration: none; color: white; font-weight: 900; font-size: 14px; display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .btn-wa { background: #25d366; }
-        .btn-tg { background: #0088cc; }
-        
-        footer { padding: 20px; font-size: 10px; opacity: 0.4; }
+        .btn-wa { background: #25d366; } .btn-tg { background: #0088cc; }
     </style>
 </head>
 <body>
@@ -62,32 +44,16 @@
 
 <header>
     <img src="https://llaaddzz.neocities.org/file_00000000b58071f5ab2fc62170e876ac.png" class="logo">
-    <div style="font-size: 22px; color: var(--orange); font-weight: 900; margin-top: 5px;">ORANGE STORE</div>
+    <div style="font-size: 22px; color: #ff8c00; font-weight: 900; margin-top: 5px;">ORANGE STORE</div>
 </header>
 
 <div class="container">
-    <div class="player-box">
-        <video id="video" controls autoplay playsinline poster="https://llaaddzz.neocities.org/file_00000000b58071f5ab2fc62170e876ac.png"></video>
-    </div>
-
+    <div class="player-box"><video id="video" controls autoplay playsinline></video></div>
     <div class="pricing-grid">
-        <div class="price-card">
-            <h3>شهر</h3>
-            <div class="cost">5,000</div>
-            <div class="per">د.ع</div>
-        </div>
-        <div class="price-card popular">
-            <h3>سنة كاملة</h3>
-            <div class="cost">22,000</div>
-            <div class="per">د.ع</div>
-        </div>
-        <div class="price-card">
-            <h3>3 أشهر</h3>
-            <div class="cost">10,000</div>
-            <div class="per">د.ع</div>
-        </div>
+        <div class="price-card"><h3>شهر</h3><div class="cost">5,000</div></div>
+        <div class="price-card popular"><h3>سنة كاملة</h3><div class="cost">22,000</div></div>
+        <div class="price-card"><h3>3 أشهر</h3><div class="cost">10,000</div></div>
     </div>
-
     <div class="channels-grid" id="grid"></div>
 </div>
 
@@ -96,43 +62,22 @@
     <a href="https://t.me/alialiah123456" class="float-btn btn-tg">تليجرام</a>
 </div>
 
-<footer>جميع الحقوق محفوظة - ORANGE STORE 2026</footer>
-
 <script>
     var video = document.getElementById('video');
     var hls = null;
     const links = [
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch2/ch2_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch3/ch3_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch4/ch4_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch5/ch5_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch6/ch6_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch7/ch7_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch8/ch8_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch9/ch9_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch10/ch10_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch1/ch1_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch3/ch3_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch4/ch4_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch5/ch5_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch6/ch6_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch7/ch7_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch8/ch8_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch9/ch9_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch10/ch10_360.m3u8"
+        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch2/ch2_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch3/ch3_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch4/ch4_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch5/ch5_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch6/ch6_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch7/ch7_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch8/ch8_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch9/ch9_360.m3u8","https://stream.supertv.gg:3001/supertv/sport/stv1/ch10/ch10_360.m3u8","https://stream.veo.buzz:6073/sport/ch1/ch1_360.m3u8","https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8","https://stream.veo.buzz:6073/sport/ch3/ch3_360.m3u8","https://stream.veo.buzz:6073/sport/ch4/ch4_360.m3u8","https://stream.veo.buzz:6073/sport/ch5/ch5_360.m3u8","https://stream.veo.buzz:6073/sport/ch6/ch6_360.m3u8","https://stream.veo.buzz:6073/sport/ch7/ch7_360.m3u8","https://stream.veo.buzz:6073/sport/ch8/ch8_360.m3u8","https://stream.veo.buzz:6073/sport/ch9/ch9_360.m3u8","https://stream.veo.buzz:6073/sport/ch10/ch10_360.m3u8"
     ];
 
     function playChannel(url, btn) {
         document.querySelectorAll('.channels-grid button').forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
-        if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url; video.play();
-        } else if (Hls.isSupported()) {
+        if (Hls.isSupported()) {
             if (hls) hls.destroy();
             hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url; video.play();
         }
     }
 
@@ -145,249 +90,5 @@
         if(i === 0) playChannel(link, btn);
     });
 </script>
-</body>
-</html>    const links = [
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch2/ch2_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch3/ch3_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch4/ch4_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch5/ch5_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch6/ch6_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch7/ch7_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch8/ch8_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch9/ch9_360.m3u8",
-        "https://stream.supertv.gg:3001/supertv/sport/stv1/ch10/ch10_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch1/ch1_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch3/ch3_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch4/ch4_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch5/ch5_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch6/ch6_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch7/ch7_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch8/ch8_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch9/ch9_360.m3u8",
-        "https://stream.veo.buzz:6073/sport/ch10/ch10_360.m3u8"
-    ];
-
-    function playChannel(url, btn) {
-        document.querySelectorAll('.channels-grid button').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url; video.play();
-        } else if (Hls.isSupported()) {
-            if (hls) hls.destroy();
-            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
-        }
-    }
-
-    const grid = document.getElementById('grid');
-    links.forEach((link, i) => {
-        let btn = document.createElement('button');
-        btn.innerText = "LIVE " + (i + 1);
-        btn.onclick = function() { playChannel(link, this); };
-        grid.appendChild(btn);
-        if(i === 0) playChannel(link, btn);
-    });
-</script>
-</body>
-</html>        }
-
-        .btn-top {
-            flex: 1;
-            padding: 8px 5px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            min-width: 80px;
-        }
-
-        .wa-top { background: #25d366; }
-        .tg-top { background: #0088cc; }
-        .ig-top { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-
-        .container {
-            width: 95%;
-            max-width: 600px;
-            margin: 25px auto;
-        }
-
-        .player-wrapper {
-            background: #000;
-            border-radius: 15px 15px 0 0;
-            overflow: hidden;
-            border: 2px solid var(--orange);
-            border-bottom: none;
-        }
-
-        video {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000 url('https://llaaddzz.neocities.org/file_00000000b58071f5ab2fc62170e876ac.png') no-repeat center;
-            background-size: contain;
-            display: block;
-        }
-
-        .channels-grid {
-            max-height: 400px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            padding: 15px;
-            background: #181818;
-            border: 2px solid var(--orange);
-            border-radius: 0 0 15px 15px;
-            margin-bottom: 30px;
-        }
-
-        .channels-grid::-webkit-scrollbar { width: 5px; }
-        .channels-grid::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 10px; }
-
-        .channels-grid button {
-            background: #222;
-            color: white;
-            border: 1px solid #333;
-            padding: 10px 2px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-family: 'Cairo';
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: 0.3s;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        .channels-grid button.active {
-            background: var(--orange);
-            color: black;
-            border-color: white;
-        }
-
-        .ch-num {
-            background: rgba(255, 140, 0, 0.2);
-            color: var(--orange);
-            padding: 1px 4px;
-            border-radius: 4px;
-            font-size: 8px;
-        }
-
-        .subscription-box {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid #222;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .sub-title {
-            color: var(--orange);
-            font-size: 18px;
-            text-align: center;
-            display: block;
-            margin-bottom: 20px;
-            font-weight: bold;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        footer { text-align: center; color: #555; padding: 50px 10px; font-size: 12px; }
-    </style>
-</head>
-<body>
-
-<div class="ticker-wrap">
-    <div class="ticker-move">
-        <span>🎬 أقوى عروض متجر ORANGE STORE 🎬</span>
-        <span>🔥 تم إضافة قنوات BeIN Sports لمتابعة أقوى المباريات 🔥</span>
-        <span>💰 الأسعار: شهر بـ 5 آلاف | 3 أشهر بـ 10 آلاف | سنة بـ 22 ألف ⭐</span>
-    </div>
-</div>
-
-<header>
-    <img class="logo-main" src="https://llaaddzz.neocities.org/file_00000000b58071f5ab2fc62170e876ac.png">
-    <div class="site-title">ORANGE STORE</div>
-
-    <div class="top-contact">
-        <span class="contact-label">هذا البث مجاني  SD اشترك لمشاهدة افضل:</span>
-        <div class="contact-btns-top">
-            <a href="https://wa.me/9647861627548" class="btn-top wa-top" target="_blank">واتساب</a>
-            <a href="https://t.me/alialiah123456" class="btn-top tg-top" target="_blank">تليجرام</a>
-            <a href="https://www.instagram.com/orange_store_iptv?igsh=MWduM3lpemltOGM1Yw==" class="btn-top ig-top" target="_blank">إنستغرام</a>
-        </div>
-    </div>
-</header>
-
-<div class="container">
-    <div class="player-wrapper">
-        <video id="video" controls autoplay playsinline muted poster="https://llaaddzz.neocities.org/file_00000000b58071f5ab2fc62170e876ac.png"></video>
-    </div>
-    
-    <div class="channels-grid">
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8', this)"><span class="ch-num">1</span> SPORT 1</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch2/ch2_360.m3u8', this)"><span class="ch-num">2</span> SPORT 2</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch3/ch3_360.m3u8', this)"><span class="ch-num">3</span> SPORT 3</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch4/ch4_360.m3u8', this)"><span class="ch-num">4</span> SPORT 4</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch5/ch5_360.m3u8', this)"><span class="ch-num">5</span> SPORT 5</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch6/ch6_360.m3u8', this)"><span class="ch-num">6</span> SPORT 6</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch7/ch7_360.m3u8', this)"><span class="ch-num">7</span> SPORT 7</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch8/ch8_360.m3u8', this)"><span class="ch-num">8</span> SPORT 8</button>
-        <button onclick="playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch9/ch9_360.m3u8', this)"><span class="ch-num">9</span> SPORT 9</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch1/ch1_360.m3u8', this)"><span class="ch-num">10</span> SPORT 10</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch2/ch2_360.m3u8', this)"><span class="ch-num">11</span> SPORT 11</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch3/ch3_360.m3u8', this)"><span class="ch-num">12</span> SPORT 12</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch4/ch4_360.m3u8', this)"><span class="ch-num">13</span> SPORT 13</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch5/ch5_360.m3u8', this)"><span class="ch-num">14</span> SPORT 14</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch6/ch6_360.m3u8', this)"><span class="ch-num">15</span> SPORT 15</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch7/ch7_360.m3u8', this)"><span class="ch-num">16</span> SPORT 16</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch8/ch8_360.m3u8', this)"><span class="ch-num">17</span> SPORT 17</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch9/ch9_360.m3u8', this)"><span class="ch-num">18</span> SPORT 18</button>
-        <button onclick="playChannel('https://stream.veo.buzz:6073/sport/ch10/ch10_360.m3u8', this)"><span class="ch-num">19</span> SPORT 19</button>
-    </div>
-
-    <div class="subscription-box">
-        <span class="sub-title">👑 عروض ORANGE STORE</span>
-        <p style="text-align:center;">شهر: 5,000 د.ع | 3 أشهر: 10,000 د.ع | سنة: 22,000 د.ع</p>
-    </div>
-</div>
-
-<footer>جميع الحقوق محفوظة - ORANGE STORE 2026</footer>
-
-<script>
-    function playChannel(url, btn){
-        var video = document.getElementById('video');
-        var buttons = document.querySelectorAll('.channels-grid button');
-        buttons.forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-
-        if(video.canPlayType('application/vnd.apple.mpegurl')){
-            video.src = url;
-            video.play();
-        } else {
-            if(typeof Hls !== 'undefined' && Hls.isSupported()){
-                var hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED,function() { video.play(); });
-            }
-        }
-    }
-    window.addEventListener('load', function(){
-        playChannel('https://stream.supertv.gg:3001/supertv/sport/stv1/ch1/ch1_360.m3u8', document.querySelector('.channels-grid button'));
-    });
-</script>
-
 </body>
 </html>
